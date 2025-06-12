@@ -1,0 +1,4368 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>МатеМагія - Застосунок для вивчення таблички множення</title>
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-color: #ffffff;
+            --text-color: #ffffff;
+            --section-bg: rgba(255, 255, 255, 0.1);
+            --card-bg: rgba(255, 255, 255, 0.2);
+            --shadow-color: rgba(0, 0, 0, 0.2);
+            --primary-color: #4facfe;
+            --secondary-color: #ff6b6b;
+            --success-color: #56ab2f;
+            --accent-color: #764ba2;
+            --dot-color: #4facfe;
+            --input-bg: rgba(255, 255, 255, 0.9);
+            --input-text: #333;
+            --border-color: rgba(255, 255, 255, 0.5);
+            --table-text: #333;
+            --card-front: #5D5CDE;
+            --card-back: #ffffff;
+            --cat-color-1: #E27B58;
+            --cat-color-2: #F9C46B;
+            --cat-color-3: #94D1BE;
+            --cat-theme-primary: #FF9D7A;
+            --cat-theme-secondary: #FFD166;
+            --cat-fur: #FFA36D;
+            --cat-ear: #E27B58;
+            --cat-eye: #333333;
+            --cat-nose: #FF7D6B;
+            --cat-whiskers: #FFFFFF;
+            --bubble-bg: rgba(255, 255, 255, 0.95);
+            --bubble-text: #333333;
+        }
+        
+        .dark-theme {
+            --bg-gradient: linear-gradient(135deg, #434343 0%, #000000 100%);
+            --bg-color: #181818;
+            --text-color: #f5f5f5;
+            --section-bg: rgba(30, 30, 30, 0.6);
+            --card-bg: rgba(40, 40, 40, 0.5);
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --primary-color: #5D5CDE;
+            --secondary-color: #e74c3c;
+            --success-color: #2ecc71;
+            --accent-color: #9b59b6;
+            --dot-color: #5D5CDE;
+            --input-bg: rgba(60, 60, 60, 0.9);
+            --input-text: #f5f5f5;
+            --border-color: rgba(100, 100, 100, 0.5);
+            --table-text: #f5f5f5;
+            --card-front: #333;
+            --card-back: #222;
+            --cat-color-1: #D24E16;
+            --cat-color-2: #F0B541;
+            --cat-color-3: #62A597;
+            --cat-theme-primary: #D24E16;
+            --cat-theme-secondary: #F0B541;
+            --cat-fur: #E27B58;
+            --cat-ear: #C2613F;
+            --cat-eye: #FFCC00;
+            --cat-nose: #FF6B56;
+            --cat-whiskers: #DDDDDD;
+            --bubble-bg: rgba(50, 50, 50, 0.95);
+            --bubble-text: #f5f5f5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        
+        body.cat-theme {
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 50' width='50px' height='50px' fill='%239C92AC' opacity='0.1'%3E%3Cpath d='M 10 0 C 7 0 5 2 5 5 C 5 8 7 10 10 10 C 13 10 15 8 15 5 C 15 2 13 0 10 0 z M 40 0 C 37 0 35 2 35 5 C 35 8 37 10 40 10 C 43 10 45 8 45 5 C 45 2 43 0 40 0 z M 7 23 C 3 26 0 31 0 36 C 0 40 3 43 6 43 C 9 43 12 40 12 36 C 13 39 15 41 18 41 C 21 41 24 39 25 36 C 26 39 29 41 32 41 C 35 41 37 39 38 36 C 38 40 41 43 44 43 C 47 43 50 40 50 36 C 50 31 47 26 43 23 L 43 25 C 43 30 40 34 38 34 C 36 34 35 33 35 31 C 35 29 36 27 36 24 C 36 19 33 14 25 14 C 17 14 14 19 14 24 C 14 27 14 29 14 31 C 14 33 13 34 11 34 C 9 34 7 30 7 25 z'/%3E%3C/svg%3E"),
+                       linear-gradient(135deg, var(--cat-color-1) 0%, var(--cat-color-3) 100%);
+        }
+        
+        .cat-theme .primary-gradient {
+            background: linear-gradient(45deg, var(--cat-theme-primary), var(--cat-theme-secondary)) !important;
+        }
+        
+        .cat-theme .btn-primary {
+            background: linear-gradient(45deg, var(--cat-theme-primary), var(--cat-theme-secondary)) !important;
+        }
+        
+        .cat-theme .success-gradient {
+            background: linear-gradient(45deg, var(--cat-color-3), var(--cat-color-2)) !important;
+        }
+        
+        .cat-theme .btn-success {
+            background: linear-gradient(45deg, var(--cat-color-3), var(--cat-color-2)) !important;
+        }
+        
+        .cat-footprint {
+            display: inline-block;
+            font-size: 1.2em;
+            margin: 0 3px;
+            transform: rotate(10deg);
+        }
+
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Стилі для авторизації */
+        .auth-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .auth-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .auth-container {
+            background: var(--section-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 400px;
+            width: 90%;
+            color: var(--text-color);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .auth-modal.active .auth-container {
+            transform: scale(1);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-header h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .form-input {
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1.1em;
+            background: var(--input-bg);
+            color: var(--input-text);
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .auth-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .auth-btn.primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+        }
+
+        .auth-btn.secondary {
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 20px;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+
+        .user-info {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .user-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            background: var(--secondary-color);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .cat-title {
+            margin-left: 5px;
+            font-size: 0.8em;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .themes-bar {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .theme-button {
+            background: var(--card-bg);
+            border: none;
+            border-radius: 50px;
+            padding: 8px 15px;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: bold;
+        }
+        
+        .theme-button:hover, .theme-button.active {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+            margin-top: 15px;
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .theme-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--section-bg);
+            transition: .4s;
+            border-radius: 30px;
+        }
+
+        .theme-slider:before {
+            position: absolute;
+            content: "☀️";
+            height: 24px;
+            width: 24px;
+            left: 4px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        input:checked + .theme-slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .theme-slider:before {
+            transform: translateX(28px);
+            content: "🌙";
+            background-color: #333;
+        }
+
+        .features-bar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .feature-toggle {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 8px 15px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .feature-toggle:hover {
+            background: var(--primary-color);
+        }
+
+        .feature-toggle input {
+            margin-right: 8px;
+        }
+
+        .feature-toggle label {
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+
+        .main-nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--card-bg);
+            color: var(--text-color);
+            backdrop-filter: blur(10px);
+            min-width: 150px;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        .section {
+            display: none;
+            background: var(--section-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px var(--shadow-color);
+            margin-bottom: 80px; /* Додаємо відступ внизу для котика */
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Розділ навчання */
+        .learning-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .table-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .table-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px var(--shadow-color);
+            background: var(--primary-color);
+        }
+
+        .table-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .multiplication-table {
+            background: var(--input-bg);
+            color: var(--table-text);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .table-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            font-size: 1.1em;
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .equation {
+            font-weight: 600;
+        }
+
+        .result {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* Розділ тренування */
+        .training-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--card-bg);
+            padding: 10px 15px;
+            border-radius: 10px;
+        }
+
+        .control-group label {
+            font-weight: 600;
+        }
+
+        .control-group select, .control-group input {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            background: var(--input-bg);
+            color: var(--input-text);
+        }
+
+        .training-area {
+            text-align: center;
+            display: none;
+        }
+
+        .training-area.active {
+            display: block;
+        }
+
+        .problem {
+            font-size: 3em;
+            margin: 30px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .input-area {
+            margin: 30px 0;
+        }
+
+        .answer-input {
+            font-size: 2em;
+            padding: 15px 20px;
+            border: 3px solid var(--border-color);
+            border-radius: 12px;
+            text-align: center;
+            width: 150px;
+            background: var(--input-bg);
+            color: var(--input-text);
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
+        }
+
+        .feedback {
+            font-size: 1.5em;
+            margin: 20px 0;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feedback.correct {
+            color: var(--success-color);
+            animation: bounce 0.6s ease;
+        }
+
+        .feedback.incorrect {
+            color: var(--secondary-color);
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, var(--secondary-color), #ee5a52);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, var(--success-color), #a8e6cf);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        /* Статистика */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .progress-section {
+            margin-top: 30px;
+        }
+
+        .progress-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            margin-bottom: 15px;
+            padding: 15px 20px;
+            border-radius: 10px;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, var(--success-color), #a8e6cf);
+            transition: width 0.3s ease;
+        }
+
+        /* Адаптивність */
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .problem {
+                font-size: 2em;
+            }
+            
+            .answer-input {
+                font-size: 1.5em;
+                width: 120px;
+            }
+            
+            .learning-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+                font-size: 1.4em;
+                padding: 20px 25px;
+            }
+            
+            .nav-btn {
+                width: 100%;
+                font-size: 1.3em;
+                padding: 20px 25px;
+            }
+            
+            .control-group {
+                width: 100%;
+            }
+            
+            .control-group select, .control-group input {
+                font-size: 1.2em;
+                padding: 12px 16px;
+            }
+            
+            .memory-board {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .cat-bubble {
+                max-width: 200px;
+                left: auto;
+                right: 90px;
+                bottom: 90px;
+            }
+
+            .user-info {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-bottom: 20px;
+                justify-content: center;
+            }
+        }
+
+        .hint-section {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .visual-aid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .dot-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 5px;
+        }
+
+        .dots {
+            display: grid;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .dot {
+            width: 15px;
+            height: 15px;
+            background: var(--dot-color);
+            border-radius: 50%;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .cat-dots .dot {
+            width: 16px;
+            height: 10px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            position: relative;
+        }
+        
+        .cat-dots .dot::before,
+        .cat-dots .dot::after {
+            content: '';
+            position: absolute;
+            background: var(--dot-color);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            top: -4px;
+        }
+        
+        .cat-dots .dot::before {
+            left: 0;
+        }
+        
+        .cat-dots .dot::after {
+            right: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Стилі для ігор */
+        .game-container {
+            display: none;
+            text-align: center;
+        }
+
+        .game-container.active {
+            display: block;
+        }
+
+        .game-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-description {
+            margin-bottom: 25px;
+            font-size: 1.1em;
+        }
+
+        .game-area {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            min-height: 300px;
+            position: relative;
+        }
+
+        .catch-game-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        @media (min-width: 768px) {
+            .catch-game-options {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .answer-option {
+            background: var(--card-bg);
+            border: none;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-color);
+            font-weight: bold;
+            min-height: 80px;
+        }
+
+        .answer-option:hover {
+            transform: translateY(-5px);
+            background: var(--primary-color);
+        }
+
+        .game-score {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--primary-color);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50px;
+            font-weight: bold;
+        }
+
+        .game-timer {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            padding: 10px 15px;
+            border-radius: 50px;
+            font-weight: bold;
+        }
+
+        /* Стилі для нагород */
+        .achievements-section {
+            margin-top: 40px;
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .achievement-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .achievement-card.unlocked {
+            background: linear-gradient(45deg, var(--success-color), var(--primary-color));
+        }
+
+        .achievement-card.locked {
+            filter: grayscale(1);
+            opacity: 0.7;
+        }
+
+        .achievement-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .achievement-title {
+            font-size: 1em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .achievement-description {
+            font-size: 0.8em;
+            opacity: 0.8;
+        }
+
+        /* Стилі для мініігор навігації */
+        .games-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .game-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .game-btn:hover, .game-btn.active {
+            background: var(--primary-color);
+        }
+
+        /* Анімація для розблокування нагород */
+        @keyframes unlock {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .achievement-unlocked {
+            animation: unlock 0.8s ease-in-out;
+        }
+        
+        .read-button {
+            background: var(--primary-color);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            font-size: 1.2em;
+            margin-left: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .read-button:hover {
+            background: var(--accent-color);
+            transform: scale(1.1);
+        }
+        
+        .problem-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Анімація для кнопки читання */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .read-button.speaking {
+            animation: pulse 1.5s infinite;
+            background: var(--secondary-color);
+        }
+        
+        /* Стилі для гри "Парні картки" */
+        .memory-game-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .memory-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            perspective: 1000px;
+        }
+        
+        @media (min-width: 768px) {
+            .memory-board {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        .memory-card {
+            height: 100px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .memory-card {
+                height: 80px;
+            }
+        }
+        
+        .memory-card.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .memory-card.matched {
+            transform: rotateY(180deg);
+            opacity: 0.7;
+        }
+        
+        .memory-card-front, .memory-card-back {
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+            position: absolute;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+        }
+        
+        .memory-card-front {
+            background-color: var(--card-front);
+            color: white;
+            transform: rotateY(180deg);
+            font-size: 1.4em;
+        }
+        
+        .memory-card-back {
+            background-color: var(--card-back);
+            color: var(--primary-color);
+            font-size: 2em;
+        }
+        
+        .cat-theme .memory-card-back {
+            background-color: var(--card-back);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 50' width='50px' height='50px' fill='%23E27B58' opacity='0.2'%3E%3Cpath d='M 10 0 C 7 0 5 2 5 5 C 5 8 7 10 10 10 C 13 10 15 8 15 5 C 15 2 13 0 10 0 z M 40 0 C 37 0 35 2 35 5 C 35 8 37 10 40 10 C 43 10 45 8 45 5 C 45 2 43 0 40 0 z M 7 23 C 3 26 0 31 0 36 C 0 40 3 43 6 43 C 9 43 12 40 12 36 C 13 39 15 41 18 41 C 21 41 24 39 25 36 C 26 39 29 41 32 41 C 35 41 37 39 38 36 C 38 40 41 43 44 43 C 47 43 50 40 50 36 C 50 31 47 26 43 23 L 43 25 C 43 30 40 34 38 34 C 36 34 35 33 35 31 C 35 29 36 27 36 24 C 36 19 33 14 25 14 C 17 14 14 19 14 24 C 14 27 14 29 14 31 C 14 33 13 34 11 34 C 9 34 7 30 7 25 z'/%3E%3C/svg%3E");
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .memory-level-select {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .level-button {
+            background: var(--card-bg);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: var(--text-color);
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .level-button.active, .level-button:hover {
+            background: var(--primary-color);
+        }
+        
+        .memory-stats {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .memory-stat {
+            background: var(--card-bg);
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .memory-stat-icon {
+            font-size: 1.2em;
+        }
+        
+        /* Анімації для гри "Парні картки" */
+        @keyframes cardMatch {
+            0% { transform: rotateY(180deg) scale(1); }
+            50% { transform: rotateY(180deg) scale(1.1); }
+            100% { transform: rotateY(180deg) scale(1); }
+        }
+        
+        .memory-card.match-animation {
+            animation: cardMatch 0.5s;
+        }
+        
+        @keyframes wrongMatch {
+            0%, 100% { transform: rotateY(180deg) translateX(0); }
+            20%, 60% { transform: rotateY(180deg) translateX(-5px); }
+            40%, 80% { transform: rotateY(180deg) translateX(5px); }
+        }
+        
+        .memory-card.wrong-animation {
+            animation: wrongMatch 0.5s;
+        }
+        
+        /* Стилі для котячої теми */
+        .cat-task {
+            background: linear-gradient(45deg, var(--cat-color-3), var(--cat-color-1), var(--cat-color-2));
+            background-size: 200% 200%;
+            animation: gradientBG 5s ease infinite;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .cat-task p {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .cat-task-icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+        
+        /* Стилі для котика */
+        .cat-character {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 100px;
+            height: 100px;
+            z-index: 100;
+            cursor: pointer;
+            filter: drop-shadow(0 3px 5px rgba(0,0,0,0.3));
+            transition: transform 0.3s ease;
+        }
+        
+        .cat-character:hover {
+            transform: scale(1.1);
+        }
+        
+        .cat-bounce {
+            animation: catBounce 0.5s ease;
+        }
+        
+        .cat-idle {
+            animation: catIdle 10s ease-in-out infinite;
+        }
+        
+        @keyframes catBounce {
+            0% { transform: translateY(0); }
+            40% { transform: translateY(-20px) rotate(-5deg); }
+            50% { transform: translateY(-25px) rotate(5deg); }
+            70% { transform: translateY(-15px) rotate(-3deg); }
+            100% { transform: translateY(0); }
+        }
+        
+        @keyframes catIdle {
+            0%, 100% { transform: translateY(0); }
+            25% { transform: translateY(-5px) rotate(-2deg); }
+            50% { transform: translateY(-3px) rotate(2deg); }
+            75% { transform: translateY(-6px) rotate(-1deg); }
+        }
+        
+        .cat-bubble {
+            position: fixed;
+            bottom: 130px;
+            right: 130px;
+            background: var(--bubble-bg);
+            color: var(--bubble-text);
+            padding: 12px 20px;
+            border-radius: 20px;
+            max-width: 250px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 101;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            font-weight: bold;
+        }
+        
+        .cat-bubble:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 20px;
+            width: 20px;
+            height: 20px;
+            background: var(--bubble-bg);
+            transform: rotate(45deg);
+            box-shadow: 5px 5px 5px rgba(0,0,0,0.1);
+        }
+        
+        .cat-bubble.visible {
+            opacity: 1;
+            transform: translateY(-10px);
+        }
+        
+        /* Анімація для котячих вусів */
+        @keyframes whiskerMove {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(1deg); }
+            75% { transform: rotate(-1deg); }
+        }
+        
+        @keyframes tailMove {
+            0%, 100% { transform: rotate(0); }
+            25% { transform: rotate(8deg); }
+            50% { transform: rotate(0); }
+            75% { transform: rotate(-8deg); }
+        }
+        
+        .cat-reward {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, var(--cat-color-1), var(--cat-color-2));
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.5s ease;
+            animation: catRewardAnim 0.5s ease 0.2s forwards;
+            max-width: 90%;
+        }
+        
+        @keyframes catRewardAnim {
+            0% { opacity: 0; transform: translateX(-50%) scale(0.8); }
+            80% { opacity: 1; transform: translateX(-50%) scale(1.05); }
+            100% { opacity: 1; transform: translateX(-50%) scale(1); }
+        }
+        
+        .cat-reward h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .cat-reward p {
+            margin-bottom: 15px;
+        }
+        
+        .cat-reward-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Поліпшений стиль для бульбашки в грі "Нагодуй котика" */
+        #catThoughtBubble {
+            background: var(--bubble-bg) !important;
+            color: var(--bubble-text) !important;
+            font-weight: bold !important;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.25) !important;
+            border: 2px solid rgba(255,255,255,0.2) !important;
+        }
+        
+        #catThoughtBubble > div {
+            color: var(--bubble-text) !important;
+            font-weight: bold !important;
+        }
+        
+        #catThoughtBubble > div:last-child {
+            background: var(--bubble-bg) !important;
+        }
+
+        /* Стилі для онлайн індикатора */
+        .online-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9em;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success-color);
+        }
+
+        .status-indicator.offline {
+            background: var(--secondary-color);
+        }
+
+        /* Стилі для глобальної статистики */
+        .global-stats {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .global-stats h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .global-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Модальне вікно авторизації -->
+    <div id="authModal" class="auth-modal">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h2 id="authTitle">Вхід до МатеМагії</h2>
+                <p>Авторизуйтеся для збереження прогресу</p>
+            </div>
+            
+            <form id="authForm" class="auth-form">
+                <div class="form-group">
+                    <label for="username">Ім'я користувача:</label>
+                    <input type="text" id="username" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Пароль:</label>
+                    <input type="password" id="password" class="form-input" required>
+                </div>
+                
+                <div class="auth-buttons">
+                    <button type="submit" class="auth-btn primary" id="authSubmitBtn">Увійти</button>
+                    <button type="button" class="auth-btn secondary" onclick="closeAuthModal()">Скасувати</button>
+                </div>
+            </form>
+            
+            <div class="auth-switch">
+                <p id="authSwitchText">Немає акаунту? <span onclick="switchAuthMode()">Реєстрація</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Інформація про користувача -->
+    <div id="userInfo" class="user-info" style="display: none;">
+        <div class="user-avatar" id="userAvatar">У</div>
+        <span id="userName">Користувач</span>
+        <div class="online-status">
+            <div class="status-indicator" id="statusIndicator"></div>
+            <span id="statusText">онлайн</span>
+        </div>
+        <button class="logout-btn" onclick="logout()">Вихід</button>
+    </div>
+
+    <div class="app-container">
+        <div class="header">
+            <h1>
+                🧮 МатеМагія <span class="cat-title">і Котики</span>
+            </h1>
+            <p>Інтерактивний застосунок для вивчення таблички множення</p>
+            
+            <div class="themes-bar">
+                <button class="theme-button active" id="standardTheme">
+                    <span>🧮</span> Стандартна тема
+                </button>
+                <button class="theme-button" id="catTheme">
+                    <span>🐱</span> Котяча тема
+                </button>
+            </div>
+            
+            <label class="theme-switch">
+                <input type="checkbox" id="themeToggle">
+                <span class="theme-slider"></span>
+            </label>
+        </div>
+        
+        <div class="features-bar">
+            <div class="feature-toggle">
+                <input type="checkbox" id="speechToggle" checked>
+                <label for="speechToggle">🔊 Озвучення завдань</label>
+            </div>
+            <div class="feature-toggle">
+                <input type="checkbox" id="animationsToggle" checked>
+                <label for="animationsToggle">✨ Анімації</label>
+            </div>
+            <div class="feature-toggle">
+                <input type="checkbox" id="catTasksToggle" checked>
+                <label for="catTasksToggle">🐱 Завдання з котиками</label>
+            </div>
+        </div>
+
+        <div class="main-nav">
+            <button class="nav-btn active" onclick="showSection('learning')">📚 Навчання</button>
+            <button class="nav-btn" onclick="showSection('training')">🏋️ Тренування</button>
+            <button class="nav-btn" onclick="showSection('games')">🎮 Міні-ігри</button>
+            <button class="nav-btn" onclick="showSection('statistics')">📊 Статистика</button>
+        </div>
+
+        <!-- Розділ навчання -->
+        <div id="learning" class="section active">
+            <h2 style="text-align: center; margin-bottom: 30px;">Вивчення таблички множення</h2>
+            
+            <div class="learning-grid">
+                <div class="table-card" onclick="showTable(1)">
+                    <h3>Таблиця множення на 1</h3>
+                    <p>Найпростіша таблиця для початку</p>
+                </div>
+                <div class="table-card" onclick="showTable(2)">
+                    <h3>Таблиця множення на 2</h3>
+                    <p>Подвоєння чисел</p>
+                </div>
+                <div class="table-card" onclick="showTable(3)">
+                    <h3>Таблиця множення на 3</h3>
+                    <p>Потроєння чисел</p>
+                </div>
+                <div class="table-card" onclick="showTable(4)">
+                    <h3>Таблиця множення на 4</h3>
+                    <p>Учетверення чисел</p>
+                </div>
+                <div class="table-card" onclick="showTable(5)">
+                    <h3>Таблиця множення на 5</h3>
+                    <p>Множення на 5 завжди закінчується на 0 або 5</p>
+                </div>
+                <div class="table-card" onclick="showTable(6)">
+                    <h3>Таблиця множення на 6</h3>
+                    <p>Шестикратне збільшення</p>
+                </div>
+                <div class="table-card" onclick="showTable(7)">
+                    <h3>Таблиця множення на 7</h3>
+                    <p>Семикратне збільшення</p>
+                </div>
+                <div class="table-card" onclick="showTable(8)">
+                    <h3>Таблиця множення на 8</h3>
+                    <p>Восьмикратне збільшення</p>
+                </div>
+                <div class="table-card" onclick="showTable(9)">
+                    <h3>Таблиця множення на 9</h3>
+                    <p>Дев'ятикратне збільшення</p>
+                </div>
+                <div class="table-card" onclick="showTable(10)">
+                    <h3>Таблиця множення на 10</h3>
+                    <p>Просто додай нуль!</p>
+                </div>
+            </div>
+
+            <div id="tableDisplay" style="display: none;">
+                <h3 id="tableTitle" style="text-align: center; margin-bottom: 20px;"></h3>
+                <div id="tableContent" class="multiplication-table"></div>
+                
+                <div class="hint-section">
+                    <h4>💡 Підказки та візуалізація</h4>
+                    <div id="tableHints"></div>
+                    <div id="visualAid" class="visual-aid"></div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="startTableTraining()">
+                        <span>🚀</span> Почати тренування
+                    </button>
+                    <button class="btn btn-secondary" onclick="hideTable()">
+                        <span>↩️</span> Повернутися назад
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Розділ тренування -->
+        <div id="training" class="section">
+            <h2 style="text-align: center; margin-bottom: 30px;">Тренування таблички множення</h2>
+            
+            <div id="catTask" class="cat-task" style="display: none;">
+                <p><span class="cat-task-icon">🐱</span> <span id="catTaskText">У кожного котика по 4 лапки. Скільки лапок у 3 котиків?</span></p>
+            </div>
+            
+            <div class="training-controls">
+                <div class="control-group">
+                    <label for="tableSelect">Таблиця:</label>
+                    <select id="tableSelect">
+                        <option value="mixed">Змішана</option>
+                        <option value="1">Множення на 1</option>
+                        <option value="2">Множення на 2</option>
+                        <option value="3">Множення на 3</option>
+                        <option value="4">Множення на 4</option>
+                        <option value="5">Множення на 5</option>
+                        <option value="6">Множення на 6</option>
+                        <option value="7">Множення на 7</option>
+                        <option value="8">Множення на 8</option>
+                        <option value="9">Множення на 9</option>
+                        <option value="10">Множення на 10</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label for="difficultySelect">Складність:</label>
+                    <select id="difficultySelect">
+                        <option value="easy">Легка (1-5)</option>
+                        <option value="medium">Середня (6-10)</option>
+                        <option value="hard">Важка (1-10)</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label for="hintToggle">Підказки:</label>
+                    <input type="checkbox" id="hintToggle" checked>
+                </div>
+            </div>
+
+            <div class="action-buttons" style="margin-bottom: 30px;">
+                <button class="btn btn-success" onclick="startTraining()">
+                    <span>🚀</span> Почати тренування
+                </button>
+            </div>
+
+            <div id="trainingArea" class="training-area">
+                <div class="problem-container">
+                    <div class="problem" id="problemText">2 × 3 = ?</div>
+                    <button class="read-button" id="readProblem" title="Прочитати завдання вголос">
+                        🔊
+                    </button>
+                </div>
+                
+                <div class="input-area">
+                    <input type="number" id="answerInput" class="answer-input" placeholder="?" 
+                           onkeypress="checkEnter(event)" min="0" max="100">
+                </div>
+                
+                <div class="feedback" id="trainingFeedback"></div>
+                
+                <div id="hintArea" class="hint-section" style="display: none;">
+                    <h4>💡 Підказка</h4>
+                    <div id="hintContent"></div>
+                    <div id="hintVisual" class="visual-aid"></div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="checkTrainingAnswer()">
+                        <span>✓</span> Перевірити
+                    </button>
+                    <button class="btn btn-secondary" onclick="showHint()">
+                        <span>💡</span> Підказка
+                    </button>
+                    <button class="btn btn-success" onclick="nextProblem()" style="display: none;" id="nextBtn">
+                        <span>→</span> Далі
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Розділ міні-ігор -->
+        <div id="games" class="section">
+            <h2 style="text-align: center; margin-bottom: 30px;">Міні-ігри</h2>
+            
+            <div class="games-nav">
+                <button class="game-btn active" onclick="showGame('catchGame')">🎯 Лови відповідь</button>
+                <button class="game-btn" onclick="showGame('memoryGame')">🧠 Парні картки</button>
+                <button class="game-btn" onclick="showGame('catGame')">🐱 Нагодуй котика</button>
+            </div>
+            
+            <!-- Гра "Лови відповідь" -->
+            <div id="catchGame" class="game-container active">
+                <h3 class="game-title">Лови правильну відповідь</h3>
+                <p class="game-description">Обери правильну відповідь на приклад серед декількох варіантів. Будь швидким!</p>
+                
+                <div class="game-area">
+                    <div class="game-timer" id="catchGameTimer">30с</div>
+                    <div class="game-score" id="catchGameScore">Рахунок: 0</div>
+                    
+                    <div class="problem" id="catchGameProblem">6 × 7 = ?</div>
+                    
+                    <div class="catch-game-options" id="catchGameOptions">
+                        <button class="answer-option">35</button>
+                        <button class="answer-option">42</button>
+                        <button class="answer-option">48</button>
+                        <button class="answer-option">36</button>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="startCatchGame()">
+                        <span>🎮</span> Почати гру
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Гра "Парні картки" -->
+            <div id="memoryGame" class="game-container">
+                <h3 class="game-title">Парні картки</h3>
+                <p class="game-description">Знайди пари прикладів і відповідей. Тренуй пам'ять і знання таблички множення!</p>
+                
+                <div class="memory-level-select">
+                    <button class="level-button active" data-level="easy" onclick="setMemoryGameLevel('easy')">Легкий (2×3)</button>
+                    <button class="level-button" data-level="medium" onclick="setMemoryGameLevel('medium')">Середній (3×4)</button>
+                    <button class="level-button" data-level="hard" onclick="setMemoryGameLevel('hard')">Складний (4×4)</button>
+                </div>
+                
+                <div class="game-area">
+                    <div class="game-timer" id="memoryGameTimer">60с</div>
+                    <div class="game-score" id="memoryGameScore">Пари: 0/6</div>
+                    
+                    <div class="memory-board" id="memoryBoard">
+                        <!-- Картки будуть додані динамічно через JavaScript -->
+                    </div>
+                    
+                    <div class="memory-stats">
+                        <div class="memory-stat">
+                            <span class="memory-stat-icon">🔄</span>
+                            <span id="memoryMoves">Ходи: 0</span>
+                        </div>
+                        <div class="memory-stat">
+                            <span class="memory-stat-icon">⭐</span>
+                            <span id="memoryMatches">Пари: 0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="startMemoryGame()">
+                        <span>🎮</span> Почати гру
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Гра "Нагодуй котика" -->
+            <div id="catGame" class="game-container">
+                <h3 class="game-title">Нагодуй котика</h3>
+                <p class="game-description">Розв'язуй приклади на множення, щоб нагодувати голодного котика. Котик любить правильні відповіді!</p>
+                
+                <div class="game-area">
+                    <div class="game-timer" id="catGameTimer">30с</div>
+                    <div class="game-score" id="catGameScore">Смаколики: 0</div>
+                    
+                    <div style="display: flex; align-items: center; justify-content: center; height: 250px; position: relative;">
+                        <div id="catGameCat" style="position: relative; text-align: center;">
+                            <svg width="150" height="150" viewBox="0 0 100 100" class="cat-svg">
+                                <path d="M35,60 Q50,75 65,60" stroke="#333" stroke-width="2" fill="none" />
+                                <ellipse cx="30" cy="45" rx="10" ry="15" fill="#FFBB7D" />
+                                <ellipse cx="70" cy="45" rx="10" ry="15" fill="#FFBB7D" />
+                                <circle cx="50" cy="50" r="30" fill="#FFBB7D" />
+                                <circle cx="40" cy="45" r="3" fill="#333" />
+                                <circle cx="60" cy="45" r="3" fill="#333" />
+                                <path d="M45,55 Q50,60 55,55" stroke="#333" stroke-width="2" fill="none" />
+                                <path d="M25,30 L15,15" stroke="#FFBB7D" stroke-width="4" />
+                                <path d="M75,30 L85,15" stroke="#FFBB7D" stroke-width="4" />
+                                <circle cx="15" cy="15" r="5" fill="#FFBB7D" />
+                                <circle cx="85" cy="15" r="5" fill="#FFBB7D" />
+                            </svg>
+                            <div id="catThoughtBubble" style="position: absolute; top: -80px; right: -150px; background: white; border-radius: 15px; padding: 10px; width: 150px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); display: none;">
+                                <div id="catThoughtText" style="margin-bottom: 5px; font-weight: bold;"></div>
+                                <div style="position: absolute; bottom: -10px; left: 10px; width: 20px; height: 20px; background: white; transform: rotate(45deg); box-shadow: 3px 3px 5px rgba(0,0,0,0.1);"></div>
+                            </div>
+                        </div>
+                        
+                        <div id="catFood" style="position: absolute; bottom: 20px; right: 20px; display: none;">
+                            <svg width="50" height="50" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="40" fill="#e57373" />
+                                <circle cx="30" cy="35" r="10" fill="#ef9a9a" />
+                                <circle cx="70" cy="35" r="10" fill="#ef9a9a" />
+                                <circle cx="30" cy="65" r="10" fill="#ef9a9a" />
+                                <circle cx="70" cy="65" r="10" fill="#ef9a9a" />
+                                <circle cx="50" cy="50" r="5" fill="#c62828" />
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="problem" id="catGameProblem">Скільки буде 3 × 4?</div>
+                    
+                    <div class="input-area">
+                        <input type="number" id="catGameInput" class="answer-input" placeholder="?" min="0" max="100">
+                    </div>
+                    
+                    <div class="feedback" id="catGameFeedback"></div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="startCatGame()">
+                        <span>🐱</span> Почати гру
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Розділ статистики -->
+        <div id="statistics" class="section">
+            <h2 style="text-align: center; margin-bottom: 30px;">Статистика навчання</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalProblems">0</div>
+                    <div class="stat-label">Усього прикладів</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="correctAnswers">0</div>
+                    <div class="stat-label">Правильних відповідей</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="accuracy">0%</div>
+                    <div class="stat-label">Точність</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="currentStreak">0</div>
+                    <div class="stat-label">Поточна серія</div>
+                </div>
+            </div>
+
+            <div class="progress-section">
+                <h3>Прогрес по таблицях множення</h3>
+                <div id="progressList"></div>
+            </div>
+            
+            <!-- Секція нагород і досягнень -->
+            <div class="achievements-section">
+                <h3>Твої досягнення</h3>
+                <div class="achievements-grid" id="achievementsGrid">
+                    <!-- Досягнення додаються динамічно через JS -->
+                </div>
+            </div>
+
+            <!-- Глобальна статистика -->
+            <div class="global-stats" id="globalStats" style="display: none;">
+                <h3>🌍 Глобальна статистика</h3>
+                <div class="global-stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="globalUsers">0</div>
+                        <div class="stat-label">Користувачів</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="globalProblems">0</div>
+                        <div class="stat-label">Розв'язано прикладів</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="globalSessions">0</div>
+                        <div class="stat-label">Сесій навчання</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons" style="margin-top: 30px;">
+                <button class="btn btn-primary" onclick="exportStats()">
+                    <span>💾</span> Зберегти прогрес
+                </button>
+                <button class="btn btn-secondary" onclick="resetStats()">
+                    <span>🗑️</span> Скинути статистику
+                </button>
+                <button class="btn btn-success" onclick="syncWithServer()" id="syncBtn" style="display: none;">
+                    <span>🔄</span> Синхронізувати
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Котячий персонаж -->
+    <div class="cat-character cat-idle" id="catCharacter">
+        <svg viewBox="0 0 200 200" width="100%" height="100%">
+            <!-- Тіло кота -->
+            <ellipse cx="100" cy="120" rx="55" ry="45" fill="var(--cat-fur)" />
+            
+            <!-- Лапки -->
+            <ellipse cx="70" cy="155" rx="15" ry="10" fill="var(--cat-fur)" />
+            <ellipse cx="130" cy="155" rx="15" ry="10" fill="var(--cat-fur)" />
+            
+            <!-- Голова -->
+            <circle cx="100" cy="80" r="40" fill="var(--cat-fur)" />
+            
+            <!-- Вуха -->
+            <path d="M70,60 L60,30 L85,50 Z" fill="var(--cat-ear)" />
+            <path d="M130,60 L140,30 L115,50 Z" fill="var(--cat-ear)" />
+            
+            <!-- Внутрішня частина вух -->
+            <path d="M70,60 L60,35 L80,50 Z" fill="#FFCCBB" />
+            <path d="M130,60 L140,35 L120,50 Z" fill="#FFCCBB" />
+            
+            <!-- Очі -->
+            <ellipse cx="85" cy="75" rx="6" ry="9" fill="white" />
+            <ellipse cx="115" cy="75" rx="6" ry="9" fill="white" />
+            
+            <!-- Зіниці з анімацією -->
+            <circle cx="85" cy="75" r="3" fill="var(--cat-eye)">
+                <animate attributeName="cy" values="73;77;73" dur="7s" repeatCount="indefinite" />
+            </circle>
+            <circle cx="115" cy="75" r="3" fill="var(--cat-eye)">
+                <animate attributeName="cy" values="73;77;73" dur="7s" repeatCount="indefinite" />
+            </circle>
+            
+            <!-- Ніс -->
+            <path d="M100,85 L95,95 L105,95 Z" fill="var(--cat-nose)" />
+            
+            <!-- Рот -->
+            <path d="M100,95 L100,100 M95,105 Q100,110 105,105" stroke="#333" stroke-width="2" fill="none" />
+            
+            <!-- Вуса з анімацією -->
+            <g>
+                <path d="M75,90 L45,85" stroke="var(--cat-whiskers)" stroke-width="1.5">
+                    <animate attributeName="d" values="M75,90 L45,85;M75,90 L45,87;M75,90 L45,85" dur="5s" repeatCount="indefinite" />
+                </path>
+                <path d="M75,95 L40,95" stroke="var(--cat-whiskers)" stroke-width="1.5">
+                    <animate attributeName="d" values="M75,95 L40,95;M75,95 L40,98;M75,95 L40,95" dur="7s" repeatCount="indefinite" />
+                </path>
+                <path d="M75,100 L45,105" stroke="var(--cat-whiskers)" stroke-width="1.5">
+                    <animate attributeName="d" values="M75,100 L45,105;M75,100 L45,103;M75,100 L45,105" dur="6s" repeatCount="indefinite" />
+                </path>
+                
+                <path d="M125,90 L155,85" stroke="var(--cat-whiskers)" stroke-width="1.5">
+                    <animate attributeName="d" values="M125,90 L155,85;M125,90 L155,87;M125,90 L155,85" dur="5s" repeatCount="indefinite" />
+                </path>
+                <path d="M125,95 L160,95" stroke="var(--cat-whiskers)" stroke-width="1.5">
+                    <animate attributeName="d" values="M125,95 L160,95;M125,95 L160,98;M125,95 L160,95" dur="7s" repeatCount="indefinite" />
+                </path>
+                <path d="M125,100 L155,105" stroke="var(--cat-whiskers)" stroke-width="1.5">
+                    <animate attributeName="d" values="M125,100 L155,105;M125,100 L155,103;M125,100 L155,105" dur="6s" repeatCount="indefinite" />
+                </path>
+            </g>
+            
+            <!-- Хвіст з анімацією -->
+            <path d="M155,120 Q180,100 185,70" stroke="var(--cat-fur)" stroke-width="12" stroke-linecap="round" fill="none">
+                <animateTransform attributeName="transform" 
+                             type="rotate"
+                             values="0 155 120; 5 155 120; 0 155 120; -5 155 120; 0 155 120"
+                             dur="8s"
+                             repeatCount="indefinite"/>
+            </path>
+        </svg>
+    </div>
+    
+    <div class="cat-bubble" id="catBubble">
+        Мяу! Привіт! Я допоможу тобі вивчати таблицю множення!
+    </div>
+
+    <script>
+        // API_URL для зв'язку з бекендом
+        const API_URL = 'http://localhost:3000/api';
+        
+        // Глобальні змінні для авторизації
+        let currentUser = null;
+        let authToken = null;
+        let isAuthMode = 'login'; // 'login' або 'register'
+        
+        // Глобальні змінні
+        let currentSection = 'learning';
+        let currentTable = null;
+        let trainingData = {
+            currentProblem: null,
+            tableMode: 'mixed',
+            difficulty: 'medium',
+            hintsEnabled: true
+        };
+        
+        // Глобальні змінні для синтезу мовлення
+        let speechSynthesis = window.speechSynthesis;
+        let isSpeaking = false;
+        
+        // Змінні для міні-ігор
+        let catchGameData = {
+            score: 0,
+            timer: 30,
+            interval: null,
+            currentProblem: null
+        };
+        
+        // Змінні для гри "Парні картки"
+        let memoryGameData = {
+            cards: [],
+            flippedCards: [],
+            matchedPairs: 0,
+            totalPairs: 0,
+            moves: 0,
+            timer: 60,
+            interval: null,
+            isLocked: false,
+            level: 'easy'
+        };
+        
+        // Змінні для гри "Нагодуй котика"
+        let catGameData = {
+            score: 0,
+            timer: 30,
+            interval: null,
+            currentProblem: null,
+            isAnimating: false
+        };
+        
+        // Змінні для котячих завдань
+        let catTasks = [
+            { text: "У кожного котика по 4 лапки. Скільки лапок у 3 котиків?", a: 3, b: 4 },
+            { text: "У кожного котика по 2 вушка. Скільки вушок у 5 котиків?", a: 5, b: 2 },
+            { text: "На дивані сидять 6 котів, у кожного по 1 хвостику. Скільки всього хвостиків?", a: 6, b: 1 },
+            { text: "Котик з'їдає 3 смаколики за день. Скільки смаколиків він з'їсть за 7 днів?", a: 7, b: 3 },
+            { text: "У котячому будинку на кожному поверсі по 9 котів. Скільки котів на 8 поверхах?", a: 8, b: 9 },
+            { text: "Кішка Мурка спить 10 годин на день. Скільки годин вона проспить за 5 днів?", a: 5, b: 10 },
+            { text: "Кожному з 4 котиків дали по 2 смаколики. Скільки всього смаколиків отримали котики?", a: 4, b: 2 },
+            { text: "У кожного котика по 12 вусиків. Скільки вусиків у 4 котиків?", a: 4, b: 12 },
+            { text: "Мама-кішка принесла 7 кошенятам по 3 іграшки. Скільки іграшок отримали кошенята?", a: 7, b: 3 },
+            { text: "У 8 котиків разом 96 вусиків. Скільки вусиків у кожного котика?", a: 96, b: 8 }
+        ];
+        
+        // Змінні для котячих реплік
+        let catPhrases = {
+            greetings: [
+                "Мяу! Привіт, я Мурчик!",
+                "Муррр, радий тебе бачити!",
+                "Мяу-мяу! Вчимо таблицю множення?",
+                "Привіт! Я допоможу тобі з математикою!"
+            ],
+            correct: [
+                "Мурр-мурр! Правильно!",
+                "Мяу! Ти молодець!",
+                "Нявно, ти дуже розумний!",
+                "Муррррфект! Чудова відповідь!"
+            ],
+            incorrect: [
+                "Няв... Спробуй ще раз!",
+                "Мяу? Не зовсім так...",
+                "Мурр... Я вірю, що наступного разу вийде!",
+                "Няв-няв, ще трохи практики!"
+            ],
+            encouragement: [
+                "Ти чудово справляєшся!",
+                "Продовжуй у тому ж дусі!",
+                "Тренування робить котів... тобто, майстрів!",
+                "Математика - це весело! Мяу!"
+            ]
+        };
+
+        // Список досягнень
+        const achievements = [
+            {
+                id: 'first_correct',
+                icon: '🌟',
+                title: 'Перший успіх',
+                description: 'Дай першу правильну відповідь',
+                condition: (stats) => stats.correctAnswers >= 1
+            },
+            {
+                id: 'ten_problems',
+                icon: '🔟',
+                title: 'Десяток',
+                description: 'Розв\'яжи 10 прикладів',
+                condition: (stats) => stats.totalProblems >= 10
+            },
+            {
+                id: 'perfect_5',
+                icon: '🏆',
+                title: 'Відмінник',
+                description: '5 правильних відповідей підряд',
+                condition: (stats) => stats.currentStreak >= 5 || stats.bestStreak >= 5
+            },
+            {
+                id: 'master_2',
+                icon: '✌️',
+                title: 'Знавець двійки',
+                description: 'Повністю вивчи таблицю на 2',
+                condition: (stats) => stats.tableProgress['2'] && stats.tableProgress['2'].correct >= 10
+            },
+            {
+                id: 'master_5',
+                icon: '🖐️',
+                title: 'Знавець п\'ятірки',
+                description: 'Повністю вивчи таблицю на 5',
+                condition: (stats) => stats.tableProgress['5'] && stats.tableProgress['5'].correct >= 10
+            },
+            {
+                id: 'master_9',
+                icon: '9️⃣',
+                title: 'Знавець дев\'ятки',
+                description: 'Повністю вивчи таблицю на 9',
+                condition: (stats) => stats.tableProgress['9'] && stats.tableProgress['9'].correct >= 10
+            },
+            {
+                id: 'catch_10',
+                icon: '🎯',
+                title: 'Влучний стрілець',
+                description: 'Набери 10 очок у грі "Лови відповідь"',
+                condition: (stats) => stats.gameScores && stats.gameScores.catchGame >= 10
+            },
+            {
+                id: 'math_wizard',
+                icon: '🧙',
+                title: 'Чарівник математики',
+                description: 'Дай 50 правильних відповідей',
+                condition: (stats) => stats.correctAnswers >= 50
+            },
+            {
+                id: 'memory_master',
+                icon: '🧠',
+                title: 'Майстер пам\'яті',
+                description: 'Пройди складний рівень гри "Парні картки"',
+                condition: (stats) => stats.gameScores && stats.gameScores.memoryGameHard === true
+            },
+            {
+                id: 'memory_perfect',
+                icon: '💯',
+                title: 'Ідеальна пам\'ять',
+                description: 'Знайди всі пари за менше ніж 20 ходів',
+                condition: (stats) => stats.gameScores && stats.gameScores.memoryGamePerfect === true
+            },
+            {
+                id: 'cat_friend',
+                icon: '🐱',
+                title: 'Друг котиків',
+                description: 'Розв\'яжи 5 завдань з котиками',
+                condition: (stats) => stats.catTasksSolved >= 5
+            },
+            {
+                id: 'cat_feeder',
+                icon: '🍲',
+                title: 'Годувальник котів',
+                description: 'Нагодуй котика 10 разів',
+                condition: (stats) => stats.gameScores && stats.gameScores.catGame >= 10
+            }
+        ];
+
+        // Статистика
+        let stats = JSON.parse(localStorage.getItem('multiplicationStats')) || {
+            totalProblems: 0,
+            correctAnswers: 0,
+            tableProgress: {},
+            currentStreak: 0,
+            bestStreak: 0,
+            unlockedAchievements: [],
+            catTasksSolved: 0,
+            gameScores: {
+                catchGame: 0,
+                memoryGameEasy: false,
+                memoryGameMedium: false,
+                memoryGameHard: false,
+                memoryGamePerfect: false,
+                catGame: 0
+            }
+        };
+
+        // Авторизація
+        function showAuthModal() {
+            document.getElementById('authModal').classList.add('active');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
+            // Очищаємо форму
+            document.getElementById('authForm').reset();
+        }
+
+        function switchAuthMode() {
+            const authTitle = document.getElementById('authTitle');
+            const authSubmitBtn = document.getElementById('authSubmitBtn');
+            const authSwitchText = document.getElementById('authSwitchText');
+            const emailField = document.getElementById('email').parentElement;
+            
+            if (isAuthMode === 'login') {
+                // Переключаємося на реєстрацію
+                isAuthMode = 'register';
+                authTitle.textContent = 'Реєстрація в МатеМагії';
+                authSubmitBtn.textContent = 'Зареєструватися';
+                authSwitchText.innerHTML = 'Вже є акаунт? <span onclick="switchAuthMode()">Увійти</span>';
+                emailField.style.display = 'flex';
+            } else {
+                // Переключаємося на логін
+                isAuthMode = 'login';
+                authTitle.textContent = 'Вхід до МатеМагії';
+                authSubmitBtn.textContent = 'Увійти';
+                authSwitchText.innerHTML = 'Немає акаунту? <span onclick="switchAuthMode()">Реєстрація</span>';
+                emailField.style.display = 'none';
+            }
+        }
+
+        // Обробка форми авторизації
+        document.getElementById('authForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                let response;
+                if (isAuthMode === 'register') {
+                    response = await fetch(`${API_URL}/auth/register`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ username, email, password })
+                    });
+                } else {
+                    response = await fetch(`${API_URL}/auth/login`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ username, password })
+                    });
+                }
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Успішна авторизація
+                    currentUser = data.user;
+                    authToken = data.token;
+                    
+                    // Зберігаємо токен
+                    localStorage.setItem('authToken', authToken);
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    
+                    // Закриваємо модальне вікно
+                    closeAuthModal();
+                    
+                    // Оновлюємо інтерфейс
+                    updateUserInterface();
+                    
+                    // Синхронізуємо дані з сервером
+                    await syncWithServer();
+                    
+                    showNotification(isAuthMode === 'register' ? 'Реєстрація успішна!' : 'Вхід виконано!');
+                } else {
+                    throw new Error(data.message || 'Помилка авторизації');
+                }
+            } catch (error) {
+                showNotification('Помилка: ' + error.message);
+                console.error('Auth error:', error);
+            }
+        });
+
+        function logout() {
+            currentUser = null;
+            authToken = null;
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
+            
+            // Оновлюємо інтерфейс
+            updateUserInterface();
+            
+            showNotification('Ви вийшли з акаунту');
+        }
+
+        function updateUserInterface() {
+            const userInfo = document.getElementById('userInfo');
+            const syncBtn = document.getElementById('syncBtn');
+            const globalStats = document.getElementById('globalStats');
+            
+            if (currentUser) {
+                // Користувач авторизований
+                userInfo.style.display = 'flex';
+                document.getElementById('userName').textContent = currentUser.username;
+                document.getElementById('userAvatar').textContent = currentUser.username[0].toUpperCase();
+                syncBtn.style.display = 'inline-flex';
+                globalStats.style.display = 'block';
+                
+                // Оновлюємо статус підключення
+                updateConnectionStatus(true);
+                
+                // Завантажуємо глобальну статистику
+                loadGlobalStats();
+            } else {
+                // Користувач не авторизований
+                userInfo.style.display = 'none';
+                syncBtn.style.display = 'none';
+                globalStats.style.display = 'none';
+                
+                updateConnectionStatus(false);
+            }
+        }
+
+        function updateConnectionStatus(isOnline) {
+            const statusIndicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+            
+            if (isOnline) {
+                statusIndicator.classList.remove('offline');
+                statusText.textContent = 'онлайн';
+            } else {
+                statusIndicator.classList.add('offline');
+                statusText.textContent = 'офлайн';
+            }
+        }
+
+        // Синхронізація з сервером
+        async function syncWithServer() {
+            if (!authToken) {
+                showNotification('Увійдіть до акаунту для синхронізації');
+                return;
+            }
+            
+            try {
+                // Відправляємо локальну статистику на сервер
+                const response = await fetch(`${API_URL}/stats/sync`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(stats)
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    // Оновлюємо локальну статистику даними з сервера
+                    stats = data.stats;
+                    saveStats();
+                    updateStatistics();
+                    
+                    showNotification('Синхронізація завершена!');
+                } else {
+                    throw new Error('Помилка синхронізації');
+                }
+            } catch (error) {
+                showNotification('Помилка синхронізації: ' + error.message);
+                console.error('Sync error:', error);
+            }
+        }
+
+        // Завантаження глобальної статистики
+        async function loadGlobalStats() {
+            try {
+                const response = await fetch(`${API_URL}/stats/global`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    document.getElementById('globalUsers').textContent = data.totalUsers || 0;
+                    document.getElementById('globalProblems').textContent = data.totalProblems || 0;
+                    document.getElementById('globalSessions').textContent = data.totalSessions || 0;
+                }
+            } catch (error) {
+                console.error('Error loading global stats:', error);
+            }
+        }
+
+        // Відправка статистики сесії
+        async function trackSession() {
+            if (!authToken) return;
+            
+            try {
+                await fetch(`${API_URL}/analytics/session`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        timestamp: new Date().toISOString(),
+                        userAgent: navigator.userAgent,
+                        language: navigator.language,
+                        screenResolution: `${screen.width}x${screen.height}`
+                    })
+                });
+            } catch (error) {
+                console.error('Error tracking session:', error);
+            }
+        }
+
+        // Відправка статистики дій
+        async function trackAction(action, data = {}) {
+            if (!authToken) return;
+            
+            try {
+                await fetch(`${API_URL}/analytics/action`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        action,
+                        data,
+                        timestamp: new Date().toISOString()
+                    })
+                });
+            } catch (error) {
+                console.error('Error tracking action:', error);
+            }
+        }
+
+        // Ініціалізація
+        document.addEventListener('DOMContentLoaded', function() {
+            // Перевіряємо, чи є збережений токен
+            const savedToken = localStorage.getItem('authToken');
+            const savedUser = localStorage.getItem('currentUser');
+            
+            if (savedToken && savedUser) {
+                authToken = savedToken;
+                currentUser = JSON.parse(savedUser);
+                updateUserInterface();
+                
+                // Відкладена синхронізація
+                setTimeout(syncWithServer, 1000);
+            } else {
+                // Показуємо модальне вікно авторизації через 2 секунди
+                setTimeout(() => {
+                    if (!currentUser) {
+                        showAuthModal();
+                    }
+                }, 2000);
+            }
+            
+            updateStatistics();
+            generateProgressBars();
+            setupAchievements();
+            checkDarkModePreference();
+            setupThemeToggle();
+            setupSpeechToggle();
+            setupCatCharacter();
+            setupCatTheme();
+            
+            // Відстежуємо сесію
+            trackSession();
+        });
+
+        // Інтеграція з усіма існуючими функціями
+        
+        // Налаштування котячої теми
+        function setupCatTheme() {
+            const standardThemeBtn = document.getElementById('standardTheme');
+            const catThemeBtn = document.getElementById('catTheme');
+            
+            standardThemeBtn.addEventListener('click', function() {
+                document.body.classList.remove('cat-theme');
+                standardThemeBtn.classList.add('active');
+                catThemeBtn.classList.remove('active');
+                localStorage.setItem('mathmagic-theme', 'standard');
+                trackAction('theme_change', { theme: 'standard' });
+            });
+            
+            catThemeBtn.addEventListener('click', function() {
+                document.body.classList.add('cat-theme');
+                catThemeBtn.classList.add('active');
+                standardThemeBtn.classList.remove('active');
+                localStorage.setItem('mathmagic-theme', 'cat');
+                showCatBubble(catPhrases.encouragement[Math.floor(Math.random() * catPhrases.encouragement.length)]);
+                trackAction('theme_change', { theme: 'cat' });
+            });
+            
+            // Перевірити збережену тему
+            const savedTheme = localStorage.getItem('mathmagic-theme');
+            if (savedTheme === 'cat') {
+                document.body.classList.add('cat-theme');
+                catThemeBtn.classList.add('active');
+                standardThemeBtn.classList.remove('active');
+            }
+        }
+        
+        // Налаштування котячого персонажа
+        function setupCatCharacter() {
+            const catCharacter = document.getElementById('catCharacter');
+            
+            catCharacter.addEventListener('click', function() {
+                // Анімація підстрибування
+                this.classList.remove('cat-idle');
+                this.classList.add('cat-bounce');
+                setTimeout(() => {
+                    this.classList.remove('cat-bounce');
+                    this.classList.add('cat-idle');
+                }, 500);
+                
+                // Показуємо випадкову репліку
+                const greetings = catPhrases.greetings;
+                const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+                showCatBubble(randomGreeting);
+                
+                // Відстежуємо взаємодію з котиком
+                trackAction('cat_interaction', { greeting: randomGreeting });
+                
+                // Перевіримо, чи увімкнена котяча тема, якщо ні - запропонуємо
+                if (!document.body.classList.contains('cat-theme')) {
+                    setTimeout(() => {
+                        if (confirm('Мяу! Хочеш увімкнути котячу тему?')) {
+                            document.body.classList.add('cat-theme');
+                            document.getElementById('catTheme').classList.add('active');
+                            document.getElementById('standardTheme').classList.remove('active');
+                            localStorage.setItem('mathmagic-theme', 'cat');
+                            showCatBubble('Муррр! Дякую! Тепер все виглядає набагато краще!');
+                            trackAction('theme_change', { theme: 'cat', source: 'cat_suggestion' });
+                        }
+                    }, 1000);
+                }
+            });
+            
+            // Випадкова зміна положення котика кожні 60 секунд
+            setInterval(() => {
+                if (Math.random() > 0.7) { // 30% шанс
+                    const corners = [
+                        { bottom: '20px', right: '20px' },
+                        { bottom: '20px', right: 'auto', left: '20px' },
+                        { bottom: 'auto', top: '100px', right: '20px' },
+                        { bottom: 'auto', top: '100px', right: 'auto', left: '20px' }
+                    ];
+                    
+                    const randomCorner = corners[Math.floor(Math.random() * corners.length)];
+                    
+                    catCharacter.style.transition = 'all 1.5s ease';
+                    Object.keys(randomCorner).forEach(key => {
+                        catCharacter.style[key] = randomCorner[key];
+                    });
+                    
+                    // Випадково показуємо репліку
+                    if (Math.random() > 0.6) {
+                        const phrases = catPhrases.encouragement;
+                        const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+                        showCatBubble(randomPhrase);
+                    }
+                }
+            }, 60000);
+            
+            // Покажемо вітальне повідомлення від котика
+            setTimeout(() => {
+                const greeting = catPhrases.greetings[Math.floor(Math.random() * catPhrases.greetings.length)];
+                showCatBubble(greeting);
+            }, 1000);
+        }
+        
+        // Функція для показу бульбашки з реплікою кота
+        function showCatBubble(text) {
+            const catBubble = document.getElementById('catBubble');
+            const catCharacter = document.getElementById('catCharacter');
+            
+            // Визначаємо позицію котика
+            const catRect = catCharacter.getBoundingClientRect();
+            
+            // Визначаємо позицію бульбашки відносно котика
+            if (catRect.left < window.innerWidth / 2) {
+                // Котик зліва, бульбашка справа
+                catBubble.style.right = 'auto';
+                catBubble.style.left = (catRect.right + 20) + 'px';
+                catBubble.style.bottom = (window.innerHeight - catRect.top) + 'px';
+            } else {
+                // Котик справа, бульбашка зліва
+                catBubble.style.left = 'auto';
+                catBubble.style.right = (window.innerWidth - catRect.left + 20) + 'px';
+                catBubble.style.bottom = (window.innerHeight - catRect.top) + 'px';
+            }
+            
+            // Оновлюємо текст і показуємо
+            catBubble.textContent = text;
+            catBubble.classList.add('visible');
+            
+            // Приховуємо бульбашку через 4 секунди
+            setTimeout(() => {
+                catBubble.classList.remove('visible');
+            }, 4000);
+        }
+
+        // Перевірка переваг темної теми користувача
+        function checkDarkModePreference() {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.body.classList.add('dark-theme');
+                document.getElementById('themeToggle').checked = true;
+            }
+
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+                if (event.matches) {
+                    document.body.classList.add('dark-theme');
+                    document.getElementById('themeToggle').checked = true;
+                } else {
+                    document.body.classList.remove('dark-theme');
+                    document.getElementById('themeToggle').checked = false;
+                }
+            });
+        }
+
+        // Налаштування перемикача теми
+        function setupThemeToggle() {
+            const themeToggle = document.getElementById('themeToggle');
+            themeToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    document.body.classList.add('dark-theme');
+                    trackAction('theme_toggle', { theme: 'dark' });
+                } else {
+                    document.body.classList.remove('dark-theme');
+                    trackAction('theme_toggle', { theme: 'light' });
+                }
+            });
+        }
+        
+        // Налаштування озвучення завдань
+        function setupSpeechToggle() {
+            const speechToggle = document.getElementById('speechToggle');
+            const readProblem = document.getElementById('readProblem');
+            
+            readProblem.addEventListener('click', function() {
+                readProblemAloud();
+                trackAction('speech_button_click');
+            });
+            
+            // Автоматичне озвучення нових задач
+            document.addEventListener('problemGenerated', function(e) {
+                if (speechToggle.checked) {
+                    readProblemAloud();
+                }
+            });
+        }
+        
+        // Функція для читання завдання вголос
+        function readProblemAloud() {
+            if (isSpeaking) {
+                speechSynthesis.cancel();
+                document.getElementById('readProblem').classList.remove('speaking');
+                isSpeaking = false;
+                return;
+            }
+            
+            const problemElement = document.getElementById('problemText');
+            if (!problemElement) return;
+            
+            const problemText = problemElement.textContent.replace('×', 'помножити на').replace('=', 'дорівнює');
+            
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(problemText);
+                
+                // Налаштування голосу (українська мова, якщо доступна)
+                const voices = speechSynthesis.getVoices();
+                const ukrainianVoice = voices.find(voice => voice.lang === 'uk-UA');
+                if (ukrainianVoice) {
+                    utterance.voice = ukrainianVoice;
+                } else {
+                    // Якщо української мови немає, спробуємо російську або іншу слов'янську
+                    const slavicVoice = voices.find(voice => 
+                        voice.lang === 'ru-RU' || voice.lang === 'pl-PL' || voice.lang === 'cs-CZ'
+                    );
+                    if (slavicVoice) utterance.voice = slavicVoice;
+                }
+                
+                utterance.rate = 0.9; // Трохи повільніше для кращого розуміння
+                
+                // Додати анімацію під час озвучення
+                document.getElementById('readProblem').classList.add('speaking');
+                isSpeaking = true;
+                
+                utterance.onend = function() {
+                    document.getElementById('readProblem').classList.remove('speaking');
+                    isSpeaking = false;
+                };
+                
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Навігація між розділами
+        function showSection(sectionName) {
+            // Приховуємо всі розділи
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Видаляємо активний клас з кнопок
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Показуємо потрібний розділ
+            document.getElementById(sectionName).classList.add('active');
+            
+            // Знаходимо кнопку розділу і додаємо активний клас
+            document.querySelector(`.nav-btn[onclick="showSection('${sectionName}')"]`).classList.add('active');
+            
+            currentSection = sectionName;
+            
+            // Відстежуємо навігацію
+            trackAction('section_change', { section: sectionName });
+            
+            if (sectionName === 'statistics') {
+                updateStatistics();
+                loadGlobalStats();
+            } else if (sectionName === 'games') {
+                // Ініціалізувати міні-ігри
+                showGame('catchGame');
+            }
+        }
+        
+        // Показати конкретну міні-гру
+        function showGame(gameName) {
+            // Сховати всі ігри
+            document.querySelectorAll('.game-container').forEach(game => {
+                game.classList.remove('active');
+            });
+            
+            // Видалити активний клас з кнопок ігор
+            document.querySelectorAll('.game-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Показати обрану гру
+            document.getElementById(gameName).classList.add('active');
+            
+            // Знайти кнопку гри і додати активний клас
+            document.querySelector(`.game-btn[onclick="showGame('${gameName}')"]`).classList.add('active');
+            
+            // Відстежуємо зміну гри
+            trackAction('game_change', { game: gameName });
+            
+            // Ініціалізувати гру, якщо потрібно
+            if (gameName === 'catchGame') {
+                initCatchGame();
+            } else if (gameName === 'memoryGame') {
+                setMemoryGameLevel('easy');
+            } else if (gameName === 'catGame') {
+                initCatGame();
+            }
+        }
+
+        // Показ таблиці множення
+        function showTable(number) {
+            currentTable = number;
+            const tableDisplay = document.getElementById('tableDisplay');
+            const tableTitle = document.getElementById('tableTitle');
+            const tableContent = document.getElementById('tableContent');
+            const tableHints = document.getElementById('tableHints');
+            const visualAid = document.getElementById('visualAid');
+            
+            // Відстежуємо перегляд таблиці
+            trackAction('table_view', { table: number });
+            
+            tableTitle.innerHTML = `Таблиця множення на ${number}`;
+            
+            // Генеруємо таблицю
+            let tableHTML = '';
+            for (let i = 1; i <= 10; i++) {
+                const result = number * i;
+                tableHTML += `
+                    <div class="table-row">
+                        <span class="equation">${number} × ${i}</span>
+                        <span class="result">${result}</span>
+                    </div>
+                `;
+            }
+            tableContent.innerHTML = tableHTML;
+            
+            // Додаємо підказки
+            tableHints.innerHTML = getTableHints(number);
+            
+            // Візуальна допомога для перших прикладів
+            if (number <= 5) {
+                // Визначимо, чи використовувати котячу візуалізацію
+                const useCatsDots = document.body.classList.contains('cat-theme') || 
+                                    document.getElementById('catTasksToggle').checked;
+                
+                generateVisualAid(number, 3, visualAid, useCatsDots);
+            } else {
+                visualAid.innerHTML = '';
+            }
+            
+            // Приховуємо сітку таблиць і показуємо конкретну таблицю
+            document.querySelector('.learning-grid').style.display = 'none';
+            tableDisplay.style.display = 'block';
+            
+            // Відзначаємо, що ця таблиця була переглянута
+            if (!stats.tableProgress[number]) {
+                stats.tableProgress[number] = { correct: 0, total: 0, viewed: true };
+            } else {
+                stats.tableProgress[number].viewed = true;
+            }
+            saveStats();
+            checkAchievements();
+        }
+
+        function hideTable() {
+            document.querySelector('.learning-grid').style.display = 'grid';
+            document.getElementById('tableDisplay').style.display = 'none';
+            currentTable = null;
+        }
+
+        function startTableTraining() {
+            document.getElementById('tableSelect').value = currentTable.toString();
+            showSection('training');
+            document.querySelector('.nav-btn[onclick="showSection(\'training\')"]').classList.add('active');
+            startTraining();
+        }
+
+        // Підказки для таблиць
+        function getTableHints(number) {
+            const hints = {
+                1: "Будь-яке число, помножене на 1, залишається незмінним.",
+                2: "Множення на 2 - це подвоєння числа. Можна додати число до самого себе.",
+                3: "Для множення на 3 можна використовувати лічильку на пальцях або додавати число тричі.",
+                4: "Множення на 4 - це подвоєння подвоєного числа. Спочатку помнож на 2, потім ще раз на 2.",
+                5: "Результат множення на 5 завжди закінчується на 0 або 5. Половина числа × 10.",
+                6: "Можна помножити на 3, а потім на 2, або навпаки.",
+                7: "Одна з найскладніших таблиць. Потрібно запам'ятати або використовувати додавання.",
+                8: "Подвоєння числа тричі: × 2, потім × 2, потім × 2.",
+                9: "Цікавий трюк: сума цифр результату завжди дорівнює 9 (до 9×10).",
+                10: "Найлегша таблиця - просто додай нуль до числа!"
+            };
+            
+            // Додаємо "котячі" підказки, якщо включена котяча тема
+            if (document.body.classList.contains('cat-theme')) {
+                const catHints = {
+                    1: "Мяу! Кожен котик має 1 хвостик. Коли множимо на 1, кількість хвостиків не змінюється.",
+                    2: "Муррр! У кожного котика по 2 вушка. Рахуємо вушка у кількох котиків.",
+                    3: "Няв! Коли котик отримує по 3 смаколики, ми можемо порахувати смаколики для групи котиків.",
+                    4: "Мяу! У котика 4 лапки. Рахуємо всі лапки у групи котиків.",
+                    5: "Мур-мур! Якщо дати 5 смаколиків кожному котику, можна порахувати всі смаколики.",
+                    6: "Кожен котик може з'їсти 6 рибок. Скільки рибок з'їдять кілька котиків?",
+                    7: "Котик спить 7 годин на день. Скільки годин він спить за кілька днів?",
+                    8: "Няв-мур! Скільки смаколиків отримають 8 котиків, якщо кожному дати однакову кількість?",
+                    9: "Мяу! У 9 котиків по 4 лапки. Скільки всього лапок?",
+                    10: "Порахувати смаколики для 10 котиків просто - помнож кількість смаколиків для одного котика на 10!"
+                };
+                
+                return `<p>${hints[number]}</p>
+                       <p style="margin-top: 10px;"><span class="cat-footprint">🐾</span> ${catHints[number]}</p>`;
+            }
+            
+            return hints[number] || "";
+        }
+
+        // Візуальна допомога
+        function generateVisualAid(multiplier, multiplicand, container, useCatDots = false) {
+            container.innerHTML = '';
+            
+            // Додаємо клас для котячої візуалізації, якщо потрібно
+            if (useCatDots) {
+                container.classList.add('cat-dots');
+            } else {
+                container.classList.remove('cat-dots');
+            }
+            
+            for (let i = 0; i < multiplier; i++) {
+                const dotGroup = document.createElement('div');
+                dotGroup.className = 'dot-group';
+                
+                const dots = document.createElement('div');
+                dots.className = 'dots';
+                dots.style.gridTemplateColumns = `repeat(${Math.min(multiplicand, 5)}, 1fr)`;
+                
+                for (let j = 0; j < multiplicand; j++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'dot';
+                    dot.style.animationDelay = `${(i * multiplicand + j) * 0.1}s`;
+                    dots.appendChild(dot);
+                }
+                
+                const label = document.createElement('div');
+                
+                // Якщо котяча тема, додаємо відповідні підписи
+                if (useCatDots) {
+                    label.innerHTML = `<span class="cat-task-icon">🐱</span>Котик ${i + 1}`;
+                } else {
+                    label.textContent = `Група ${i + 1}`;
+                }
+                
+                label.style.fontSize = '0.9em';
+                label.style.opacity = '0.8';
+                
+                dotGroup.appendChild(dots);
+                dotGroup.appendChild(label);
+                container.appendChild(dotGroup);
+            }
+            
+            const result = document.createElement('div');
+            result.style.marginTop = '15px';
+            result.style.fontSize = '1.2em';
+            result.style.fontWeight = 'bold';
+            
+            if (useCatDots) {
+                // Вибираємо тип предмета залежно від кількості
+                let itemType;
+                if (multiplicand === 4) {
+                    itemType = { single: 'лапка', few: 'лапки', many: 'лапок' };
+                } else if (multiplicand === 2) {
+                    itemType = { single: 'вушко', few: 'вушка', many: 'вушок' };
+                } else if (multiplicand === 1) {
+                    itemType = { single: 'хвостик', few: 'хвостики', many: 'хвостиків' };
+                } else {
+                    itemType = { single: 'смаколик', few: 'смаколики', many: 'смаколиків' };
+                }
+                
+                // Визначаємо правильну форму слова для результату
+                const totalCount = multiplier * multiplicand;
+                let itemForm;
+                if (totalCount % 10 === 1 && totalCount % 100 !== 11) {
+                    itemForm = itemType.single;
+                } else if ([2, 3, 4].includes(totalCount % 10) && ![12, 13, 14].includes(totalCount % 100)) {
+                    itemForm = itemType.few;
+                } else {
+                    itemForm = itemType.many;
+                }
+                
+                // Визначаємо правильну форму слова для початкової кількості
+                let startItemForm;
+                if (multiplicand % 10 === 1 && multiplicand % 100 !== 11) {
+                    startItemForm = itemType.single;
+                } else if ([2, 3, 4].includes(multiplicand % 10) && ![12, 13, 14].includes(multiplicand % 100)) {
+                    startItemForm = itemType.few;
+                } else {
+                    startItemForm = itemType.many;
+                }
+                
+                result.innerHTML = `${multiplier} котик${multiplier > 1 ? 'и' : ''} × ${multiplicand} ${startItemForm} = ${totalCount} ${itemForm}`;
+            } else {
+                result.innerHTML = `${multiplier} групи по ${multiplicand} = ${multiplier * multiplicand}`;
+            }
+            
+            container.appendChild(result);
+        }
+
+        // Тренування
+        function startTraining() {
+            trainingData.tableMode = document.getElementById('tableSelect').value;
+            trainingData.difficulty = document.getElementById('difficultySelect').value;
+            trainingData.hintsEnabled = document.getElementById('hintToggle').checked;
+            
+            // Відстежуємо початок тренування
+            trackAction('training_start', {
+                tableMode: trainingData.tableMode,
+                difficulty: trainingData.difficulty,
+                hintsEnabled: trainingData.hintsEnabled
+            });
+            
+            document.getElementById('trainingArea').classList.add('active');
+            document.getElementById('hintArea').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+            
+            // Визначаємо, чи показувати завдання з котиками
+            const showCatTask = document.getElementById('catTasksToggle').checked && Math.random() > 0.5;
+            
+            if (showCatTask && trainingData.tableMode !== 'mixed') {
+                const tableNum = parseInt(trainingData.tableMode);
+                const filteredTasks = catTasks.filter(task => 
+                    task.a === tableNum || task.b === tableNum
+                );
+                
+                if (filteredTasks.length > 0) {
+                    const randomTask = filteredTasks[Math.floor(Math.random() * filteredTasks.length)];
+                    document.getElementById('catTask').style.display = 'block';
+                    document.getElementById('catTaskText').textContent = randomTask.text;
+                    
+                    trainingData.currentProblem = {
+                        a: randomTask.a,
+                        b: randomTask.b,
+                        answer: randomTask.a * randomTask.b,
+                        isCatTask: true
+                    };
+                    
+                    document.getElementById('problemText').textContent = `${randomTask.a} × ${randomTask.b} = ?`;
+                    document.getElementById('answerInput').value = '';
+                    document.getElementById('answerInput').disabled = false;
+                    document.getElementById('answerInput').focus();
+                    document.getElementById('trainingFeedback').textContent = '';
+                    document.getElementById('trainingFeedback').className = 'feedback';
+                    
+                    // Викликаємо подію про згенеровану задачу для автоматичного озвучення
+                    document.dispatchEvent(new Event('problemGenerated'));
+                    return;
+                }
+            }
+            
+            // Якщо не показуємо завдання з котиками, то показуємо звичайне
+            document.getElementById('catTask').style.display = 'none';
+            nextProblem();
+        }
+
+        function nextProblem() {
+            // Генеруємо новий приклад
+            const problem = generateProblem();
+            trainingData.currentProblem = problem;
+            
+            document.getElementById('problemText').textContent = `${problem.a} × ${problem.b} = ?`;
+            document.getElementById('answerInput').value = '';
+            document.getElementById('answerInput').disabled = false;
+            document.getElementById('answerInput').focus();
+            document.getElementById('trainingFeedback').textContent = '';
+            document.getElementById('trainingFeedback').className = 'feedback';
+            document.getElementById('hintArea').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+            
+            // Скидаємо завдання з котиками
+            document.getElementById('catTask').style.display = 'none';
+            
+            // Викликаємо подію про згенеровану задачу для автоматичного озвучення
+            document.dispatchEvent(new Event('problemGenerated'));
+        }
+
+        function generateProblem() {
+            let a, b;
+            
+            if (trainingData.tableMode === 'mixed') {
+                // Генеруємо випадкові числа залежно від складності
+                switch(trainingData.difficulty) {
+                    case 'easy':
+                        a = Math.floor(Math.random() * 5) + 1;
+                        b = Math.floor(Math.random() * 5) + 1;
+                        break;
+                    case 'medium':
+                        a = Math.floor(Math.random() * 5) + 6;
+                        b = Math.floor(Math.random() * 5) + 6;
+                        break;
+                    case 'hard':
+                        a = Math.floor(Math.random() * 10) + 1;
+                        b = Math.floor(Math.random() * 10) + 1;
+                        break;
+                    default:
+                        a = Math.floor(Math.random() * 10) + 1;
+                        b = Math.floor(Math.random() * 10) + 1;
+                }
+            } else {
+                const table = parseInt(trainingData.tableMode);
+                a = table;
+                let minB = 1, maxB = 10;
+                
+                switch(trainingData.difficulty) {
+                    case 'easy':
+                        minB = 1;
+                        maxB = 5;
+                        break;
+                    case 'medium':
+                        minB = 6;
+                        maxB = 10;
+                        break;
+                    case 'hard':
+                        minB = 1;
+                        maxB = 10;
+                        break;
+                }
+                
+                b = Math.floor(Math.random() * (maxB - minB + 1)) + minB;
+            }
+            
+            return { a, b, answer: a * b };
+        }
+
+        function checkTrainingAnswer() {
+            const userAnswer = parseInt(document.getElementById('answerInput').value);
+            const correctAnswer = trainingData.currentProblem.answer;
+            const feedback = document.getElementById('trainingFeedback');
+            
+            if (isNaN(userAnswer) || document.getElementById('answerInput').value === '') {
+                feedback.textContent = 'Будь ласка, введіть числову відповідь';
+                feedback.className = 'feedback incorrect';
+                return;
+            }
+            
+            stats.totalProblems++;
+            
+            // Якщо це було котяче завдання, збільшуємо лічильник
+            if (trainingData.currentProblem.isCatTask) {
+                stats.catTasksSolved = (stats.catTasksSolved || 0) + 1;
+            }
+            
+            const isCorrect = userAnswer === correctAnswer;
+            
+            // Відстежуємо відповідь
+            trackAction('answer_submitted', {
+                problem: `${trainingData.currentProblem.a} × ${trainingData.currentProblem.b}`,
+                userAnswer,
+                correctAnswer,
+                isCorrect,
+                isCatTask: trainingData.currentProblem.isCatTask
+            });
+            
+            if (isCorrect) {
+                feedback.textContent = '🎉 Правильно! Молодець!';
+                feedback.className = 'feedback correct';
+                stats.correctAnswers++;
+                stats.currentStreak++;
+                
+                // Програємо звук успіху
+                try {
+                    playSuccessSound();
+                } catch(e) {
+                    console.log('Audio not supported');
+                }
+                
+                // Показуємо реакцію котика, якщо увімкнена відповідна опція
+                if (document.getElementById('catTasksToggle').checked || document.body.classList.contains('cat-theme')) {
+                    const catReactions = catPhrases.correct;
+                    const randomReaction = catReactions[Math.floor(Math.random() * catReactions.length)];
+                    showCatBubble(randomReaction);
+                }
+                
+                // Оновлюємо прогрес по таблиці
+                const tableKey = trainingData.currentProblem.a;
+                if (!stats.tableProgress[tableKey]) {
+                    stats.tableProgress[tableKey] = { correct: 0, total: 0 };
+                }
+                stats.tableProgress[tableKey].correct++;
+                stats.tableProgress[tableKey].total++;
+                
+                if (stats.currentStreak > stats.bestStreak) {
+                    stats.bestStreak = stats.currentStreak;
+                }
+            } else {
+                feedback.textContent = `Не зовсім так. Правильна відповідь: ${correctAnswer}`;
+                feedback.className = 'feedback incorrect';
+                stats.currentStreak = 0;
+                
+                // Програємо звук помилки
+                try {
+                    playErrorSound();
+                } catch(e) {
+                    console.log('Audio not supported');
+                }
+                
+                // Показуємо реакцію котика, якщо увімкнена відповідна опція
+                if (document.getElementById('catTasksToggle').checked || document.body.classList.contains('cat-theme')) {
+                    const catReactions = catPhrases.incorrect;
+                    const randomReaction = catReactions[Math.floor(Math.random() * catReactions.length)];
+                    showCatBubble(randomReaction);
+                }
+                
+                // Оновлюємо прогрес по таблиці
+                const tableKey = trainingData.currentProblem.a;
+                if (!stats.tableProgress[tableKey]) {
+                    stats.tableProgress[tableKey] = { correct: 0, total: 0 };
+                }
+                stats.tableProgress[tableKey].total++;
+            }
+            
+            saveStats();
+            checkAchievements();
+            document.getElementById('nextBtn').style.display = 'inline-block';
+            
+            // Блокуємо поле введення до наступного питання
+            document.getElementById('answerInput').disabled = true;
+        }
+
+        function showHint() {
+            if (!trainingData.hintsEnabled) return;
+            
+            const hintArea = document.getElementById('hintArea');
+            const hintContent = document.getElementById('hintContent');
+            const hintVisual = document.getElementById('hintVisual');
+            const problem = trainingData.currentProblem;
+            
+            // Відстежуємо використання підказки
+            trackAction('hint_used', {
+                problem: `${problem.a} × ${problem.b}`
+            });
+            
+            // Генеруємо підказку
+            let hint = '';
+            if (problem.a === 1 || problem.b === 1) {
+                hint = 'Будь-яке число × 1 = це саме число';
+            } else if (problem.a === 2 || problem.b === 2) {
+                const other = problem.a === 2 ? problem.b : problem.a;
+                hint = `Множення на 2 - це подвоєння. ${other} + ${other} = ${other * 2}`;
+            } else if (problem.a === 5 || problem.b === 5) {
+                hint = 'Результат множення на 5 завжди закінчується на 0 або 5';
+            } else if (problem.a === 9 || problem.b === 9) {
+                hint = 'Трюк з 9: сума цифр результату дорівнює 9';
+            } else if (problem.a === 10 || problem.b === 10) {
+                const other = problem.a === 10 ? problem.b : problem.a;
+                hint = `Множення на 10 - просто додай нуль: ${other}0`;
+            } else {
+                hint = `Спробуй додати ${problem.a} саме до себе ${problem.b} разів`;
+            }
+            
+            // Якщо котяча тема, додаємо "котячу" підказку
+            if (document.body.classList.contains('cat-theme') || document.getElementById('catTasksToggle').checked) {
+                // Визначаємо підказки на основі чисел та їх властивостей
+                const catHintType = getCatHintType(problem.a, problem.b);
+                
+                hint += `<br><br><span class="cat-task-icon">🐱</span> ${catHintType}`;
+            }
+            
+            hintContent.innerHTML = hint;
+            
+            // Визначаємо, чи використовувати котячу візуалізацію
+            const useCatsDots = document.body.classList.contains('cat-theme') || 
+                                document.getElementById('catTasksToggle').checked;
+            
+            // Візуальна підказка для простих випадків
+            if (problem.a <= 5 && problem.b <= 5) {
+                generateVisualAid(problem.a, problem.b, hintVisual, useCatsDots);
+            } else {
+                hintVisual.innerHTML = '';
+            }
+            
+            hintArea.style.display = 'block';
+        }
+        
+        // Функція для визначення типу котячої підказки залежно від чисел
+        function getCatHintType(a, b) {
+            // Це дозволяє природно використовувати "котячі" елементи
+            let smallerNum = Math.min(a, b);
+            let largerNum = Math.max(a, b);
+            
+            if (smallerNum === 4 || largerNum === 4) {
+                // Якщо одне з чисел 4, то це лапки
+                return `У ${smallerNum} котиків по 4 лапки. Всього ${smallerNum * 4} лапок.`;
+            } else if (smallerNum === 2 || largerNum === 2) {
+                // Якщо одне з чисел 2, то це вушка
+                return `У ${smallerNum} котиків по 2 вушка. Всього ${smallerNum * 2} вушка.`;
+            } else if (smallerNum === 1 || largerNum === 1) {
+                // Якщо одне з чисел 1, то це хвостики
+                return `У ${largerNum} котиків по 1 хвостику. Всього ${largerNum} хвостиків.`;
+            } else if (smallerNum === 12 || largerNum === 12) {
+                // Якщо одне з чисел 12, то це вусики
+                return `У ${a === 12 ? b : a} котиків по 12 вусиків. Всього ${a * b} вусиків.`;
+            } else {
+                // В інших випадках використовуємо смаколики
+                return `Якщо дати кожному з ${a} котиків по ${b} смаколиків, всього потрібно ${a * b} смаколиків.`;
+            }
+        }
+
+        function checkEnter(event) {
+            if (event.key === 'Enter') {
+                checkTrainingAnswer();
+            }
+        }
+
+        // Статистика
+        function updateStatistics() {
+            document.getElementById('totalProblems').textContent = stats.totalProblems;
+            document.getElementById('correctAnswers').textContent = stats.correctAnswers;
+            
+            const accuracy = stats.totalProblems > 0 ? 
+                Math.round((stats.correctAnswers / stats.totalProblems) * 100) : 0;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+            
+            document.getElementById('currentStreak').textContent = stats.currentStreak;
+            
+            generateProgressBars();
+            updateAchievements();
+        }
+
+        function generateProgressBars() {
+            const progressList = document.getElementById('progressList');
+            progressList.innerHTML = '';
+            
+            for (let i = 1; i <= 10; i++) {
+                const progress = stats.tableProgress[i] || { correct: 0, total: 0 };
+                const percentage = progress.total > 0 ? 
+                    Math.round((progress.correct / progress.total) * 100) : 0;
+                
+                const progressItem = document.createElement('div');
+                progressItem.className = 'progress-item';
+                
+                // Додаємо котячу іконку для таблиць, якщо вибрана котяча тема
+                const catIcon = document.body.classList.contains('cat-theme') ? 
+                                '<span class="cat-task-icon">🐱</span>' : '';
+                
+                progressItem.innerHTML = `
+                    <span>${catIcon}Таблиця множення на ${i}</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${percentage}%"></div>
+                    </div>
+                    <span>${percentage}% (${progress.correct}/${progress.total})</span>
+                `;
+                
+                progressList.appendChild(progressItem);
+            }
+        }
+
+        function saveStats() {
+            localStorage.setItem('multiplicationStats', JSON.stringify(stats));
+            
+            // Відкладена синхронізація з сервером
+            if (authToken) {
+                setTimeout(syncWithServer, 5000);
+            }
+        }
+
+        function resetStats() {
+            if (confirm('Ви впевнені, що хочете скинути всю статистику?')) {
+                trackAction('stats_reset');
+                
+                stats = {
+                    totalProblems: 0,
+                    correctAnswers: 0,
+                    tableProgress: {},
+                    currentStreak: 0,
+                    bestStreak: 0,
+                    unlockedAchievements: [],
+                    catTasksSolved: 0,
+                    gameScores: {
+                        catchGame: 0,
+                        memoryGameEasy: false,
+                        memoryGameMedium: false,
+                        memoryGameHard: false,
+                        memoryGamePerfect: false,
+                        catGame: 0
+                    }
+                };
+                saveStats();
+                updateStatistics();
+            }
+        }
+        
+        // Функції для експорту/імпорту статистики
+        function exportStats() {
+            trackAction('stats_export');
+            
+            const dataStr = JSON.stringify(stats, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'matematika_progress.json';
+            link.click();
+        }
+
+        function importStats(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const importedStats = JSON.parse(e.target.result);
+                        stats = importedStats;
+                        saveStats();
+                        updateStatistics();
+                        trackAction('stats_import', { success: true });
+                        alert('Статистику успішно імпортовано!');
+                    } catch (error) {
+                        trackAction('stats_import', { success: false, error: error.message });
+                        alert('Помилка при імпорті файлу. Перевірте формат.');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        // Досягнення
+        function setupAchievements() {
+            const achievementsGrid = document.getElementById('achievementsGrid');
+            achievementsGrid.innerHTML = '';
+            
+            achievements.forEach(achievement => {
+                const card = document.createElement('div');
+                card.className = 'achievement-card';
+                card.id = `achievement-${achievement.id}`;
+                card.innerHTML = `
+                    <div class="achievement-icon">${achievement.icon}</div>
+                    <div class="achievement-title">${achievement.title}</div>
+                    <div class="achievement-description">${achievement.description}</div>
+                `;
+                achievementsGrid.appendChild(card);
+            });
+            
+            updateAchievements();
+        }
+        
+        function updateAchievements() {
+            achievements.forEach(achievement => {
+                const card = document.getElementById(`achievement-${achievement.id}`);
+                if (!card) return;
+                
+                const isUnlocked = stats.unlockedAchievements && 
+                                   stats.unlockedAchievements.includes(achievement.id);
+                
+                if (isUnlocked) {
+                    card.classList.add('unlocked');
+                    card.classList.remove('locked');
+                } else {
+                    card.classList.add('locked');
+                    card.classList.remove('unlocked');
+                }
+            });
+        }
+        
+        function checkAchievements() {
+            if (!stats.unlockedAchievements) {
+                stats.unlockedAchievements = [];
+            }
+            
+            let newAchievements = [];
+            
+            achievements.forEach(achievement => {
+                if (!stats.unlockedAchievements.includes(achievement.id) && 
+                    achievement.condition(stats)) {
+                    stats.unlockedAchievements.push(achievement.id);
+                    newAchievements.push(achievement);
+                }
+            });
+            
+            if (newAchievements.length > 0) {
+                saveStats();
+                updateAchievements();
+                
+                // Відстежуємо розблокування досягнень
+                newAchievements.forEach(achievement => {
+                    trackAction('achievement_unlocked', { achievement: achievement.id });
+                });
+                
+                // Якщо користувач зараз у розділі статистики, анімуємо нові досягнення
+                if (currentSection === 'statistics') {
+                    newAchievements.forEach(achievement => {
+                        const card = document.getElementById(`achievement-${achievement.id}`);
+                        if (card) {
+                            card.classList.add('achievement-unlocked');
+                            setTimeout(() => {
+                                card.classList.remove('achievement-unlocked');
+                            }, 1000);
+                        }
+                    });
+                }
+                
+                // Показуємо повідомлення про нове досягнення
+                newAchievements.forEach(achievement => {
+                    showCatReward(achievement);
+                });
+            }
+        }
+        
+        // Функція для показу нагород котика
+        function showCatReward(achievement) {
+            // Створюємо елемент нагороди
+            let catReward = document.createElement('div');
+            catReward.className = 'cat-reward';
+            
+            catReward.innerHTML = `
+                <span class="cat-reward-icon">${achievement.icon}</span>
+                <h3>Нове досягнення!</h3>
+                <p>${achievement.title}</p>
+                <p>${achievement.description}</p>
+            `;
+            
+            document.body.appendChild(catReward);
+            
+            // Додаємо звук досягнення
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
+                oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.2);
+                oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.4);
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 1);
+            } catch(e) {
+                console.log('Audio not supported');
+            }
+            
+            // Показуємо анімацію з котиком
+            const catCharacter = document.getElementById('catCharacter');
+            catCharacter.classList.remove('cat-idle');
+            catCharacter.classList.add('cat-bounce');
+            
+            // Показуємо репліку котика
+            showCatBubble('Мурр! Вітаю з новим досягненням!');
+            
+            // Через 3 секунди прибираємо нагороду
+            setTimeout(() => {
+                catReward.style.opacity = '0';
+                catReward.style.transform = 'translateX(-50%) scale(0.8)';
+                setTimeout(() => {
+                    document.body.removeChild(catReward);
+                    catCharacter.classList.remove('cat-bounce');
+                    catCharacter.classList.add('cat-idle');
+                }, 500);
+            }, 3000);
+        }
+        
+        // Функція для показу повідомлень
+        function showNotification(message) {
+            // Якщо нотифікації ще не існує, створюємо її
+            let notification = document.getElementById('notification');
+            if (!notification) {
+                notification = document.createElement('div');
+                notification.id = 'notification';
+                notification.style.position = 'fixed';
+                notification.style.bottom = '20px';
+                notification.style.left = '50%';
+                notification.style.transform = 'translateX(-50%)';
+                notification.style.background = 'var(--primary-color)';
+                notification.style.color = 'white';
+                notification.style.padding = '12px 20px';
+                notification.style.borderRadius = '8px';
+                notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+                notification.style.zIndex = '1000';
+                notification.style.transition = 'all 0.3s ease';
+                notification.style.opacity = '0';
+                document.body.appendChild(notification);
+            }
+            
+            notification.textContent = message;
+            notification.style.opacity = '1';
+            
+            // Через 3 секунди ховаємо повідомлення
+            setTimeout(() => {
+                notification.style.opacity = '0';
+            }, 3000);
+        }
+
+        // Додаткові функції для покращення користувацького досвіду
+        document.addEventListener('keydown', function(event) {
+            if (currentSection === 'training' && 
+                document.getElementById('trainingArea').classList.contains('active')) {
+                
+                if (event.key === 'Escape') {
+                    document.getElementById('trainingArea').classList.remove('active');
+                } else if (event.key === ' ' && event.target.tagName !== 'INPUT') {
+                    event.preventDefault();
+                    const nextBtn = document.getElementById('nextBtn');
+                    if (nextBtn.style.display !== 'none') {
+                        nextProblem();
+                    }
+                }
+            }
+        });
+
+        // Автофокус на поле введення
+        function focusInput() {
+            const input = document.getElementById('answerInput');
+            if (input) {
+                input.focus();
+            }
+        }
+
+        // Покращена підказка для складніших таблиць
+        function getAdvancedHint(a, b) {
+            const strategies = {
+                6: (other) => `6 × ${other} = (5 × ${other}) + ${other} = ${5 * other} + ${other} = ${6 * other}`,
+                7: (other) => `7 × ${other} = (5 × ${other}) + (2 × ${other}) = ${5 * other} + ${2 * other} = ${7 * other}`,
+                8: (other) => `8 × ${other} = (4 × ${other}) × 2 = ${4 * other} × 2 = ${8 * other}`,
+                9: (other) => `9 × ${other} = (10 × ${other}) - ${other} = ${10 * other} - ${other} = ${9 * other}`
+            };
+            
+            if (strategies[a]) {
+                return strategies[a](b);
+            } else if (strategies[b]) {
+                return strategies[b](a);
+            }
+            
+            return `${a} × ${b} = ${a * b}`;
+        }
+
+        // Звуковий зворотний зв'язок (опціонально)
+        function playSuccessSound() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // До
+            oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // Мі
+            oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // Соль
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.3);
+        }
+
+        function playErrorSound() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 200;
+            oscillator.type = 'sawtooth';
+            
+            gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+        
+        // Міні-гра "Лови відповідь"
+        function initCatchGame() {
+            // Очистимо попередню гру, якщо вона запущена
+            if (catchGameData.interval) {
+                clearInterval(catchGameData.interval);
+                catchGameData.interval = null;
+            }
+            
+            // Оновлюємо інтерфейс
+            document.getElementById('catchGameScore').textContent = 'Рахунок: 0';
+            document.getElementById('catchGameTimer').textContent = '30с';
+            document.getElementById('catchGameProblem').textContent = 'Натисни "Почати гру"';
+            
+            const optionsContainer = document.getElementById('catchGameOptions');
+            optionsContainer.innerHTML = '';
+            
+            // Скидаємо дані гри
+            catchGameData.score = 0;
+            catchGameData.timer = 30;
+        }
+        
+        function startCatchGame() {
+            // Ініціалізуємо дані гри
+            catchGameData.score = 0;
+            catchGameData.timer = 30;
+            
+            // Відстежуємо початок гри
+            trackAction('catch_game_start');
+            
+            // Оновлюємо інтерфейс
+            document.getElementById('catchGameScore').textContent = 'Рахунок: 0';
+            document.getElementById('catchGameTimer').textContent = '30с';
+            
+            // Генеруємо перше питання
+            generateCatchGameQuestion();
+            
+            // Запускаємо таймер
+            if (catchGameData.interval) {
+                clearInterval(catchGameData.interval);
+            }
+            
+            catchGameData.interval = setInterval(() => {
+                catchGameData.timer--;
+                document.getElementById('catchGameTimer').textContent = catchGameData.timer + 'с';
+                
+                if (catchGameData.timer <= 0) {
+                    endCatchGame();
+                }
+            }, 1000);
+        }
+        
+        function generateCatchGameQuestion() {
+            // Генеруємо випадковий приклад
+            const a = Math.floor(Math.random() * 10) + 1;
+            const b = Math.floor(Math.random() * 10) + 1;
+            const correctAnswer = a * b;
+            
+            // Зберігаємо поточне питання
+            catchGameData.currentProblem = { a, b, answer: correctAnswer };
+            
+            // Додаємо контекст відповідно до особливостей котів
+            let problemText = `${a} × ${b} = ?`;
+            
+            if (document.body.classList.contains('cat-theme') || document.getElementById('catTasksToggle').checked) {
+                // Визначаємо тип котячого завдання на основі чисел
+                if (a === 4 || b === 4) {
+                    // Використовуємо лапки
+                    problemText = `У ${a === 4 ? b : a} котиків по 4 лапки. Скільки всього лапок?`;
+                } else if (a === 2 || b === 2) {
+                    // Використовуємо вушка
+                    problemText = `У ${a === 2 ? b : a} котиків по 2 вушка. Скільки всього вушок?`;
+                } else if (a === 1 || b === 1) {
+                    // Використовуємо хвостики
+                    problemText = `У ${Math.max(a, b)} котиків по 1 хвостику. Скільки всього хвостиків?`;
+                } else {
+                    // Використовуємо смаколики
+                    problemText = `${a} котиків отримали по ${b} смаколиків. Скільки всього смаколиків?`;
+                }
+            }
+            
+            // Оновлюємо текст проблеми
+            document.getElementById('catchGameProblem').innerHTML = problemText;
+            
+            // Генеруємо варіанти відповідей
+            const options = generateAnswerOptions(correctAnswer);
+            
+            // Оновлюємо контейнер з варіантами
+            const optionsContainer = document.getElementById('catchGameOptions');
+            optionsContainer.innerHTML = '';
+            
+            // Перемішуємо варіанти
+            shuffleArray(options);
+            
+            // Додаємо варіанти на сторінку
+            options.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'answer-option';
+                button.textContent = option;
+                
+                button.addEventListener('click', () => {
+                    checkCatchGameAnswer(option);
+                });
+                
+                optionsContainer.appendChild(button);
+            });
+        }
+        
+        function generateAnswerOptions(correctAnswer) {
+            const options = [correctAnswer];
+            
+            // Генеруємо 3 невірні варіанти
+            while (options.length < 4) {
+                // Генеруємо число в діапазоні ±20% від правильної відповіді, але не менше 1
+                let rangeMin = Math.max(1, Math.floor(correctAnswer * 0.8));
+                let rangeMax = Math.ceil(correctAnswer * 1.2);
+                
+                // Якщо правильна відповідь мала, збільшуємо діапазон
+                if (correctAnswer < 10) {
+                    rangeMin = 1;
+                    rangeMax = 20;
+                }
+                
+                const wrongAnswer = Math.floor(Math.random() * (rangeMax - rangeMin + 1)) + rangeMin;
+                
+                // Додаємо тільки унікальні варіанти
+                if (wrongAnswer !== correctAnswer && !options.includes(wrongAnswer)) {
+                    options.push(wrongAnswer);
+                }
+            }
+            
+            return options;
+        }
+        
+        function checkCatchGameAnswer(selectedAnswer) {
+            const correctAnswer = catchGameData.currentProblem.answer;
+            const isCorrect = parseInt(selectedAnswer) === correctAnswer;
+            
+            // Відстежуємо відповідь у грі
+            trackAction('catch_game_answer', {
+                problem: `${catchGameData.currentProblem.a} × ${catchGameData.currentProblem.b}`,
+                selectedAnswer,
+                correctAnswer,
+                isCorrect
+            });
+            
+            if (isCorrect) {
+                // Правильна відповідь
+                catchGameData.score++;
+                document.getElementById('catchGameScore').textContent = 'Рахунок: ' + catchGameData.score;
+                
+                // Ефект для правильної відповіді
+                const problem = document.getElementById('catchGameProblem');
+                problem.textContent = '✓ Правильно!';
+                problem.style.color = 'var(--success-color)';
+                
+                // Оновлюємо рахунок у статистиці
+                if (!stats.gameScores) stats.gameScores = {};
+                stats.gameScores.catchGame = Math.max(catchGameData.score, stats.gameScores.catchGame || 0);
+                saveStats();
+                checkAchievements();
+                
+                // Затримка перед наступним питанням
+                setTimeout(() => {
+                    problem.style.color = '';
+                    generateCatchGameQuestion();
+                }, 1000);
+            } else {
+                // Неправильна відповідь
+                const problem = document.getElementById('catchGameProblem');
+                problem.textContent = `✗ ${catchGameData.currentProblem.a} × ${catchGameData.currentProblem.b} = ${correctAnswer}`;
+                problem.style.color = 'var(--secondary-color)';
+                
+                // Затримка перед наступним питанням
+                setTimeout(() => {
+                    problem.style.color = '';
+                    generateCatchGameQuestion();
+                }, 1500);
+            }
+        }
+        
+        function endCatchGame() {
+            clearInterval(catchGameData.interval);
+            catchGameData.interval = null;
+            
+            const problem = document.getElementById('catchGameProblem');
+            problem.textContent = `Гра завершена! Твій результат: ${catchGameData.score}`;
+            
+            const optionsContainer = document.getElementById('catchGameOptions');
+            optionsContainer.innerHTML = '';
+            
+            // Відстежуємо завершення гри
+            trackAction('catch_game_end', { score: catchGameData.score });
+            
+            if (catchGameData.score > 0) {
+                // Оновлюємо рахунок у статистиці, якщо потрібно
+                if (!stats.gameScores) stats.gameScores = {};
+                stats.gameScores.catchGame = Math.max(catchGameData.score, stats.gameScores.catchGame || 0);
+                saveStats();
+                checkAchievements();
+            }
+        }
+        
+        // Гра "Парні картки"
+        function setMemoryGameLevel(level) {
+            // Встановлюємо активний рівень
+            document.querySelectorAll('.level-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            document.querySelector(`.level-button[data-level="${level}"]`).classList.add('active');
+            
+            memoryGameData.level = level;
+            
+            // Відстежуємо зміну рівня
+            trackAction('memory_game_level_change', { level });
+            
+            // Налаштовуємо параметри для рівня
+            switch(level) {
+                case 'easy':
+                    memoryGameData.rows = 2;
+                    memoryGameData.cols = 3;
+                    memoryGameData.timer = 60;
+                    break;
+                case 'medium':
+                    memoryGameData.rows = 3;
+                    memoryGameData.cols = 4;
+                    memoryGameData.timer = 90;
+                    break;
+                case 'hard':
+                    memoryGameData.rows = 4;
+                    memoryGameData.cols = 4;
+                    memoryGameData.timer = 120;
+                    break;
+            }
+            
+            document.getElementById('memoryGameTimer').textContent = memoryGameData.timer + 'с';
+            document.getElementById('memoryGameScore').textContent = `Пари: 0/${(memoryGameData.rows * memoryGameData.cols) / 2}`;
+            resetMemoryGame();
+        }
+        
+        function resetMemoryGame() {
+            // Скидаємо дані гри
+            memoryGameData.cards = [];
+            memoryGameData.flippedCards = [];
+            memoryGameData.matchedPairs = 0;
+            memoryGameData.totalPairs = (memoryGameData.rows * memoryGameData.cols) / 2;
+            memoryGameData.moves = 0;
+            memoryGameData.isLocked = false;
+            
+            // Очищаємо ігрове поле
+            const boardElement = document.getElementById('memoryBoard');
+            boardElement.innerHTML = '';
+            
+            // Налаштовуємо вигляд дошки
+            boardElement.style.gridTemplateColumns = `repeat(${memoryGameData.cols}, 1fr)`;
+            boardElement.style.gridTemplateRows = `repeat(${memoryGameData.rows}, 1fr)`;
+            
+            // Встановлюємо початкові значення для статистики
+            document.getElementById('memoryMoves').textContent = 'Ходи: 0';
+            document.getElementById('memoryMatches').textContent = 'Пари: 0';
+            
+            document.getElementById('memoryBoard').innerHTML = `
+                <div style="grid-column: 1 / -1; padding: 50px 0; text-align: center; font-size: 1.2em;">
+                    Натисни "Почати гру" щоб розпочати
+                </div>
+            `;
+        }
+        
+        function startMemoryGame() {
+            // Якщо таймер уже запущено, зупиняємо його
+            if (memoryGameData.interval) {
+                clearInterval(memoryGameData.interval);
+                memoryGameData.interval = null;
+            }
+            
+            // Відстежуємо початок гри
+            trackAction('memory_game_start', { level: memoryGameData.level });
+            
+            // Скидаємо дані гри
+            memoryGameData.flippedCards = [];
+            memoryGameData.matchedPairs = 0;
+            memoryGameData.moves = 0;
+            memoryGameData.isLocked = false;
+            
+            // Створюємо карти
+            createMemoryCards();
+            
+            // Оновлюємо статистику
+            document.getElementById('memoryMoves').textContent = 'Ходи: 0';
+            document.getElementById('memoryMatches').textContent = 'Пари: 0';
+            
+            // Запускаємо таймер
+            memoryGameData.timer = memoryGameData.level === 'easy' ? 60 : (memoryGameData.level === 'medium' ? 90 : 120);
+            document.getElementById('memoryGameTimer').textContent = memoryGameData.timer + 'с';
+            document.getElementById('memoryGameScore').textContent = `Пари: 0/${memoryGameData.totalPairs}`;
+            
+            memoryGameData.interval = setInterval(() => {
+                memoryGameData.timer--;
+                document.getElementById('memoryGameTimer').textContent = memoryGameData.timer + 'с';
+                
+                if (memoryGameData.timer <= 0) {
+                    endMemoryGame(false);
+                }
+            }, 1000);
+        }
+        
+        function createMemoryCards() {
+            const boardElement = document.getElementById('memoryBoard');
+            boardElement.innerHTML = '';
+            
+            // Визначаємо кількість пар
+            const totalPairs = (memoryGameData.rows * memoryGameData.cols) / 2;
+            memoryGameData.totalPairs = totalPairs;
+            
+            // Створюємо масив карток (пари: завдання та відповідь)
+            let cards = [];
+            let usedProblems = new Set();
+            
+            // Визначаємо, чи використовувати котячу тематику
+            const useCatTheme = document.body.classList.contains('cat-theme') || 
+                                document.getElementById('catTasksToggle').checked;
+            
+            // Генеруємо унікальні пари множення
+            while (cards.length < totalPairs * 2) {
+                let a = Math.floor(Math.random() * 10) + 1;
+                let b = Math.floor(Math.random() * 10) + 1;
+                
+                // Уникаємо дублікатів
+                const problemKey = `${a}x${b}`;
+                const reverseProblemKey = `${b}x${a}`;
+                
+                if (!usedProblems.has(problemKey) && !usedProblems.has(reverseProblemKey)) {
+                    usedProblems.add(problemKey);
+                    
+                    // Додаємо котячий контекст, якщо вибрана котяча тема
+                    let problemContent = `${a} × ${b}`;
+                    
+                    if (useCatTheme && Math.random() > 0.5) {
+                        const catEmojis = ['🐱', '😺', '😸', '😻', '🐈'];
+                        const randomEmoji = catEmojis[Math.floor(Math.random() * catEmojis.length)];
+                        problemContent = `${randomEmoji} ${a} × ${b}`;
+                    }
+                    
+                    // Додаємо карту завдання
+                    cards.push({
+                        id: cards.length,
+                        pairId: cards.length / 2,
+                        type: 'problem',
+                        content: problemContent,
+                        value: a * b
+                    });
+                    
+                    // Додаємо карту відповіді
+                    let answerContent = `${a * b}`;
+                    
+                    if (useCatTheme && Math.random() > 0.7) {
+                        // Додаємо котячі "сліди" навколо відповіді
+                        answerContent = `🐾 ${a * b} 🐾`;
+                    }
+                    
+                    cards.push({
+                        id: cards.length,
+                        pairId: Math.floor(cards.length / 2),
+                        type: 'answer',
+                        content: answerContent,
+                        value: a * b
+                    });
+                }
+            }
+            
+            // Перемішуємо карти
+            shuffleArray(cards);
+            memoryGameData.cards = cards;
+            
+            // Додаємо карти на дошку
+            cards.forEach(card => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'memory-card';
+                cardElement.dataset.id = card.id;
+                cardElement.dataset.pairId = card.pairId;
+                cardElement.dataset.value = card.value;
+                
+                cardElement.innerHTML = `
+                    <div class="memory-card-front">${card.content}</div>
+                    <div class="memory-card-back">?</div>
+                `;
+                
+                cardElement.addEventListener('click', () => flipCard(cardElement));
+                boardElement.appendChild(cardElement);
+            });
+        }
+        
+        function flipCard(cardElement) {
+            // Ігноруємо кліки, якщо:
+            // - гра заблокована (перевірка пари)
+            // - карта вже перевернута або вже знайдена
+            // - вже вибрано дві карти
+            if (
+                memoryGameData.isLocked || 
+                cardElement.classList.contains('flipped') || 
+                cardElement.classList.contains('matched') || 
+                memoryGameData.flippedCards.length >= 2
+            ) {
+                return;
+            }
+            
+            // Перевертаємо карту
+            cardElement.classList.add('flipped');
+            
+            // Додаємо карту до списку перевернутих
+            memoryGameData.flippedCards.push(cardElement);
+            
+            // Якщо перевернуто дві карти, перевіряємо чи вони утворюють пару
+            if (memoryGameData.flippedCards.length === 2) {
+                // Збільшуємо лічильник ходів
+                memoryGameData.moves++;
+                document.getElementById('memoryMoves').textContent = `Ходи: ${memoryGameData.moves}`;
+                
+                // Блокуємо гру на час перевірки
+                memoryGameData.isLocked = true;
+                
+                const card1 = memoryGameData.flippedCards[0];
+                const card2 = memoryGameData.flippedCards[1];
+                
+                // Перевіряємо, чи однакові значення у карт
+                if (card1.dataset.value === card2.dataset.value) {
+                    // Пара знайдена
+                    setTimeout(() => {
+                        card1.classList.add('matched', 'match-animation');
+                        card2.classList.add('matched', 'match-animation');
+                        
+                        // Збільшуємо лічильник знайдених пар
+                        memoryGameData.matchedPairs++;
+                        document.getElementById('memoryMatches').textContent = `Пари: ${memoryGameData.matchedPairs}`;
+                        document.getElementById('memoryGameScore').textContent = `Пари: ${memoryGameData.matchedPairs}/${memoryGameData.totalPairs}`;
+                        
+                        // Програємо звук успіху
+                        try {
+                            playSuccessSound();
+                        } catch(e) {
+                            console.log('Audio not supported');
+                        }
+                        
+                        // Показуємо котячу реакцію, якщо вибрана котяча тема
+                        if (document.body.classList.contains('cat-theme') || document.getElementById('catTasksToggle').checked) {
+                            const catReactions = catPhrases.correct;
+                            const randomReaction = catReactions[Math.floor(Math.random() * catReactions.length)];
+                            showCatBubble(randomReaction);
+                        }
+                        
+                        // Очищаємо перевернуті карти
+                        memoryGameData.flippedCards = [];
+                        memoryGameData.isLocked = false;
+                        
+                        // Перевіряємо, чи всі пари знайдені
+                        if (memoryGameData.matchedPairs === memoryGameData.totalPairs) {
+                            endMemoryGame(true);
+                        }
+                    }, 500);
+                } else {
+                    // Пара не знайдена
+                    setTimeout(() => {
+                        card1.classList.add('wrong-animation');
+                        card2.classList.add('wrong-animation');
+                        
+                        // Через 0.5 секунд прибираємо анімацію тряски
+                        setTimeout(() => {
+                            card1.classList.remove('wrong-animation');
+                            card2.classList.remove('wrong-animation');
+                            card1.classList.remove('flipped');
+                            card2.classList.remove('flipped');
+                            
+                            memoryGameData.flippedCards = [];
+                            memoryGameData.isLocked = false;
+                        }, 600);
+                        
+                        // Програємо звук помилки
+                        try {
+                            playErrorSound();
+                        } catch(e) {
+                            console.log('Audio not supported');
+                        }
+                        
+                        // Показуємо котячу реакцію, якщо вибрана котяча тема
+                        if (document.body.classList.contains('cat-theme') || document.getElementById('catTasksToggle').checked) {
+                            const catReactions = catPhrases.incorrect;
+                            const randomReaction = catReactions[Math.floor(Math.random() * catReactions.length)];
+                            showCatBubble(randomReaction);
+                        }
+                    }, 500);
+                }
+            }
+        }
+        
+        function endMemoryGame(isWin) {
+            // Зупиняємо таймер
+            clearInterval(memoryGameData.interval);
+            memoryGameData.interval = null;
+            
+            // Блокуємо всі карти
+            memoryGameData.isLocked = true;
+            
+            // Відстежуємо завершення гри
+            trackAction('memory_game_end', {
+                level: memoryGameData.level,
+                isWin,
+                moves: memoryGameData.moves,
+                timeRemaining: memoryGameData.timer
+            });
+            
+            if (isWin) {
+                showNotification(`🎉 Вітаємо! Ти знайшов усі пари за ${memoryGameData.moves} ходів!`);
+                
+                // Оновлюємо статистику
+                updateMemoryGameStats(true);
+                
+                // Якщо гравець знайшов усі пари за менше ніж 20 ходів
+                if (memoryGameData.moves < 20) {
+                    stats.gameScores.memoryGamePerfect = true;
+                    saveStats();
+                    checkAchievements();
+                }
+            } else {
+                showNotification(`⏱️ Час вийшов! Знайдено ${memoryGameData.matchedPairs} з ${memoryGameData.totalPairs} пар.`);
+                
+                // Оновлюємо статистику, але не рахуємо перемогу
+                updateMemoryGameStats(false);
+            }
+        }
+        
+        function updateMemoryGameStats(isWin) {
+            if (isWin) {
+                switch (memoryGameData.level) {
+                    case 'easy':
+                        stats.gameScores.memoryGameEasy = true;
+                        break;
+                    case 'medium':
+                        stats.gameScores.memoryGameMedium = true;
+                        break;
+                    case 'hard':
+                        stats.gameScores.memoryGameHard = true;
+                        break;
+                }
+                
+                saveStats();
+                checkAchievements();
+            }
+        }
+        
+        // Гра "Нагодуй котика"
+        function initCatGame() {
+            // Очистимо попередню гру, якщо вона запущена
+            if (catGameData.interval) {
+                clearInterval(catGameData.interval);
+                catGameData.interval = null;
+            }
+            
+            // Оновлюємо інтерфейс
+            document.getElementById('catGameScore').textContent = 'Смаколики: 0';
+            document.getElementById('catGameTimer').textContent = '30с';
+            document.getElementById('catGameProblem').textContent = 'Натисни "Почати гру" щоб погодувати котика';
+            document.getElementById('catGameInput').value = '';
+            document.getElementById('catFood').style.display = 'none';
+            document.getElementById('catThoughtBubble').style.display = 'none';
+            
+            // Скидаємо дані гри
+            catGameData.score = 0;
+            catGameData.timer = 30;
+            catGameData.isAnimating = false;
+        }
+        
+        function startCatGame() {
+            // Очищаємо поля
+            document.getElementById('catGameInput').value = '';
+            document.getElementById('catGameFeedback').textContent = '';
+            
+            // Ініціалізуємо дані гри
+            catGameData.score = 0;
+            catGameData.timer = 30;
+            
+            // Відстежуємо початок гри
+            trackAction('cat_game_start');
+            
+            // Оновлюємо інтерфейс
+            document.getElementById('catGameScore').textContent = 'Смаколики: 0';
+            document.getElementById('catGameTimer').textContent = '30с';
+            
+            // Показуємо думки котика
+            const catThought = document.getElementById('catThoughtBubble');
+            catThought.style.display = 'block';
+            document.getElementById('catThoughtText').textContent = 'Мяу! Я голодний!';
+            
+            // Генеруємо перше питання
+            generateCatGameQuestion();
+            
+            // Фокус на поле введення
+            document.getElementById('catGameInput').focus();
+            
+            // Додаємо обробник клавіші Enter
+            document.getElementById('catGameInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    checkCatGameAnswer();
+                }
+            });
+            
+            // Запускаємо таймер
+            if (catGameData.interval) {
+                clearInterval(catGameData.interval);
+            }
+            
+            catGameData.interval = setInterval(() => {
+                catGameData.timer--;
+                document.getElementById('catGameTimer').textContent = catGameData.timer + 'с';
+                
+                if (catGameData.timer <= 0) {
+                    endCatGame();
+                }
+            }, 1000);
+        }
+        
+        function generateCatGameQuestion() {
+            // Генеруємо випадкове питання множення
+            const a = Math.floor(Math.random() * 10) + 1;
+            const b = Math.floor(Math.random() * 10) + 1;
+            const correctAnswer = a * b;
+            
+            // Зберігаємо поточне питання
+            catGameData.currentProblem = { a, b, answer: correctAnswer };
+            
+            // Визначаємо тип питання на основі чисел (для узгодженості з анатомією котів)
+            let questionText;
+            
+            if (a === 4 || b === 4) {
+                // Використовуємо лапки
+                questionText = `У ${a === 4 ? b : a} котиків по 4 лапки. Скільки всього лапок?`;
+            } else if (a === 2 || b === 2) {
+                // Використовуємо вушка
+                questionText = `У ${a === 2 ? b : a} котиків по 2 вушка. Скільки всього вушок?`;
+            } else if (a === 1 || b === 1) {
+                // Використовуємо хвостики
+                questionText = `У ${Math.max(a, b)} котиків по 1 хвостику. Скільки всього хвостиків?`;
+            } else {
+                // Використовуємо смаколики
+                questionText = `${a} котиків отримали по ${b} смаколиків. Скільки всього смаколиків?`;
+            }
+            
+            // Оновлюємо текст питання
+            document.getElementById('catGameProblem').textContent = questionText;
+            
+            // Оновлюємо думки котика
+            const catThoughts = [
+                "Мяу, здається я знаю відповідь...",
+                "Мур-мур, це складно...",
+                "Няв! Дай мені подумати...",
+                "Якщо розв'яжеш правильно, отримаю смаколик!"
+            ];
+            
+            const randomThought = catThoughts[Math.floor(Math.random() * catThoughts.length)];
+            document.getElementById('catThoughtText').textContent = randomThought;
+        }
+        
+        function checkCatGameAnswer() {
+            // Якщо анімація ще триває, ігноруємо клік
+            if (catGameData.isAnimating) return;
+            
+            const userAnswer = parseInt(document.getElementById('catGameInput').value);
+            const correctAnswer = catGameData.currentProblem.answer;
+            const feedback = document.getElementById('catGameFeedback');
+            
+            if (isNaN(userAnswer) || document.getElementById('catGameInput').value === '') {
+                feedback.textContent = 'Будь ласка, введіть числову відповідь';
+                feedback.className = 'feedback incorrect';
+                return;
+            }
+            
+            const isCorrect = userAnswer === correctAnswer;
+            
+            // Відстежуємо відповідь у грі
+            trackAction('cat_game_answer', {
+                problem: `${catGameData.currentProblem.a} × ${catGameData.currentProblem.b}`,
+                userAnswer,
+                correctAnswer,
+                isCorrect
+            });
+            
+            if (isCorrect) {
+                // Правильна відповідь
+                feedback.textContent = '🎉 Правильно! Котик радіє!';
+                feedback.className = 'feedback correct';
+                
+                // Збільшуємо рахунок
+                catGameData.score++;
+                document.getElementById('catGameScore').textContent = 'Смаколики: ' + catGameData.score;
+                
+                // Оновлюємо статистику
+                if (!stats.gameScores) stats.gameScores = {};
+                stats.gameScores.catGame = Math.max(catGameData.score, stats.gameScores.catGame || 0);
+                saveStats();
+                
+                // Показуємо анімацію годування котика
+                feedCat();
+                
+                // Оновлюємо думки котика
+                const catThoughts = [
+                    "Мяу! Дякую за смаколик!",
+                    "Мммм... Смачно!",
+                    "Няв! Ще хочу!",
+                    "Мурррр! Чудово!"
+                ];
+                
+                const randomThought = catThoughts[Math.floor(Math.random() * catThoughts.length)];
+                document.getElementById('catThoughtText').textContent = randomThought;
+                
+                // Через 2 секунди генеруємо нове питання
+                setTimeout(() => {
+                    document.getElementById('catGameInput').value = '';
+                    document.getElementById('catGameFeedback').textContent = '';
+                    generateCatGameQuestion();
+                    document.getElementById('catGameInput').focus();
+                }, 2000);
+            } else {
+                // Неправильна відповідь
+                feedback.textContent = `Не зовсім так. Правильна відповідь: ${correctAnswer}`;
+                feedback.className = 'feedback incorrect';
+                
+                // Оновлюємо думки котика
+                const catThoughts = [
+                    "Мяу... Здається, це не так",
+                    "Няв? Спробуй ще раз",
+                    "Мяу-мяу... Я все ще голодний",
+                    "Мурр... Я вірю в тебе!"
+                ];
+                
+                const randomThought = catThoughts[Math.floor(Math.random() * catThoughts.length)];
+                document.getElementById('catThoughtText').textContent = randomThought;
+                
+                // Через 2 секунди генеруємо нове питання
+                setTimeout(() => {
+                    document.getElementById('catGameInput').value = '';
+                    document.getElementById('catGameFeedback').textContent = '';
+                    generateCatGameQuestion();
+                    document.getElementById('catGameInput').focus();
+                }, 2000);
+            }
+            
+            // Перевіряємо досягнення
+            checkAchievements();
+        }
+        
+        function feedCat() {
+            catGameData.isAnimating = true;
+            
+            // Показуємо їжу
+            const catFood = document.getElementById('catFood');
+            catFood.style.display = 'block';
+            
+            // Анімація руху їжі до котика
+            catFood.style.transition = 'all 1s ease';
+            catFood.style.right = '80px';
+            catFood.style.bottom = '80px';
+            
+            // Програємо звук успіху
+            try {
+                playSuccessSound();
+            } catch(e) {
+                console.log('Audio not supported');
+            }
+            
+            // Анімація "їдіння"
+            setTimeout(() => {
+                catFood.style.display = 'none';
+                catFood.style.right = '20px';
+                catFood.style.bottom = '20px';
+                
+                // Анімуємо котика
+                const catCharacter = document.getElementById('catGameCat');
+                catCharacter.classList.add('cat-bounce');
+                
+                setTimeout(() => {
+                    catCharacter.classList.remove('cat-bounce');
+                    catGameData.isAnimating = false;
+                }, 500);
+            }, 1000);
+        }
+        
+        function endCatGame() {
+            clearInterval(catGameData.interval);
+            catGameData.interval = null;
+            
+            document.getElementById('catGameProblem').textContent = `Гра завершена! Котик отримав ${catGameData.score} смаколиків!`;
+            document.getElementById('catGameInput').disabled = true;
+            
+            // Відстежуємо завершення гри
+            trackAction('cat_game_end', { score: catGameData.score });
+            
+            // Оновлюємо думки котика
+            if (catGameData.score > 5) {
+                document.getElementById('catThoughtText').textContent = "Мурррр! Я наївся і дуже задоволений!";
+            } else if (catGameData.score > 0) {
+                document.getElementById('catThoughtText').textContent = "Мяу! Дякую за смаколики!";
+            } else {
+                document.getElementById('catThoughtText').textContent = "Мяу... Я все ще голодний...";
+            }
+            
+            // Оновлюємо статистику
+            if (!stats.gameScores) stats.gameScores = {};
+            stats.gameScores.catGame = Math.max(catGameData.score, stats.gameScores.catGame || 0);
+            saveStats();
+            checkAchievements();
+        }
+        
+        // Допоміжна функція для перемішування масиву
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+    </script>
+</body>
+</html>
